@@ -106,7 +106,22 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/auth/mfa/verify', [AuthController::class, 'mfaVerify']);
         Route::post('/auth/mfa/recovery', [AuthController::class, 'mfaRecovery']);
         Route::get('/kyc', [KycController::class, 'show']);
-        Route::post('/kyc/documents', [KycController::class, 'submit']);
+        Route::post('/kyc/draft', [KycController::class, 'updateDraft']);
+        Route::get('/kyc/countries', [KycController::class, 'countries']);
+        Route::get('/kyc/document-types', [KycController::class, 'documentTypes']);
+        Route::post('/kyc/documents', [KycController::class, 'submitDocument']);
+        Route::post('/kyc/submit', [KycController::class, 'submit']);
+        Route::get('/kyc/status', [KycController::class, 'status']);
+        Route::delete('/kyc/documents/{id}', [KycController::class, 'deleteDocument']);
+        Route::get('/me/kyc', [KycController::class, 'show']);
+        Route::post('/me/kyc', [KycController::class, 'submit']);
+        Route::patch('/me/kyc/draft', [KycController::class, 'updateDraft']);
+        Route::get('/me/kyc/countries', [KycController::class, 'countries']);
+        Route::get('/me/kyc/document-types', [KycController::class, 'documentTypes']);
+        Route::post('/me/kyc/documents', [KycController::class, 'submitDocument']);
+        Route::delete('/me/kyc/documents/{id}', [KycController::class, 'deleteDocument']);
+        Route::post('/me/kyc/submit', [KycController::class, 'submit']);
+        Route::get('/me/kyc/status', [KycController::class, 'status']);
         Route::get('/notifications', [NotificationController::class, 'index']);
         Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
         Route::patch('/notifications/{id}/read', [NotificationController::class, 'read']);
@@ -142,6 +157,7 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/compliance', [PlatformAdminController::class, 'compliance'])->middleware('platform.admin:compliance.read');
             Route::get('/compliance/{case}', [PlatformAdminController::class, 'complianceCase'])->middleware('platform.admin:compliance.read');
             Route::post('/compliance/{case}/decision', [PlatformAdminController::class, 'complianceDecision'])->middleware('platform.admin:compliance.decide');
+            Route::post('/compliance/{case}/request-info', [PlatformAdminController::class, 'requestKycInfo'])->middleware('platform.admin:compliance.decide');
             Route::get('/financial/summary', [PlatformAdminController::class, 'financial'])->middleware('platform.admin:financial.read');
             Route::get('/risk/cases', [PlatformAdminController::class, 'riskCases'])->middleware('platform.admin:risk.read');
             Route::post('/risk/cases', [PlatformAdminController::class, 'createRiskCase'])->middleware('platform.admin:risk.manage');
@@ -154,6 +170,12 @@ Route::prefix('v1')->group(function (): void {
             Route::put('/feature-flags/{flag}', [PlatformAdminController::class, 'updateFeatureFlag'])->middleware('platform.admin:settings.manage');
             Route::get('/health', [PlatformAdminController::class, 'health'])->middleware('platform.admin:system.health');
             Route::post('/step-up', [PlatformAdminController::class, 'stepUp'])->middleware('platform.admin:system.health');
+        });
+        Route::prefix('platform/kyc')->group(function (): void {
+            Route::get('/applications', [PlatformAdminController::class, 'compliance'])->middleware('platform.admin:compliance.read');
+            Route::get('/applications/{case}', [PlatformAdminController::class, 'complianceCase'])->middleware('platform.admin:compliance.read');
+            Route::post('/applications/{case}/review', [PlatformAdminController::class, 'complianceDecision'])->middleware('platform.admin:compliance.decide');
+            Route::post('/applications/{case}/request-info', [PlatformAdminController::class, 'requestKycInfo'])->middleware('platform.admin:compliance.decide');
         });
         Route::prefix('platform')->group(function (): void {
             Route::get('/security/overview', [PlatformSecurityController::class, 'overview'])->middleware('platform.admin:dashboard.read');

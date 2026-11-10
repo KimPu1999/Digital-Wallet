@@ -98,17 +98,33 @@ final class PlatformAdminController
 
     public function complianceCase(Request $request, KycCase $case): JsonResponse
     {
-        return response()->json(['data' => ['case' => $case->load('user'), 'documents' => $case->documents()->select(['id', 'document_type', 'mime_type', 'size_bytes', 'scan_status', 'review_status', 'uploaded_at'])->get(), 'sandbox_only' => true], 'sandbox_only' => true]);
+        return response()->json(['data' => ['case' => $case->load(['user', 'statusEvents']), 'documents' => $case->documents()->select(['id', 'document_type', 'mime_type', 'size_bytes', 'scan_status', 'review_status', 'uploaded_at'])->get(), 'sandbox_only' => true], 'sandbox_only' => true]);
     }
 
     public function complianceDecision(AdminComplianceDecisionRequest $request, KycCase $case): JsonResponse
     {
         app(PlatformAdminAccessService::class)->assertSensitive($request->user(), 'compliance.decide', $request->string('challenge_id')->toString(), $request->string('challenge_code')->toString());
         $previous = ['status' => $case->status];
+        $from = $case->status;
         $case->update(['status' => $request->string('status')->toString(), 'reviewed_at' => now()]);
         DB::table('kyc_reviews')->insert(['id' => (string) \Illuminate\Support\Str::uuid(), 'kyc_case_id' => $case->id, 'reviewer_id' => $request->user()->id, 'decision' => $request->string('status')->toString(), 'notes' => $request->string('reason')->toString(), 'created_at' => now(), 'updated_at' => now()]);
+        if ($from !== $case->status) $case->statusEvents()->create(['actor_id' => $request->user()->id, 'from_status' => $from, 'to_status' => $case->status, 'reason' => $request->string('reason')->toString(), 'metadata' => ['decision' => $request->string('status')->toString(), 'sandbox_only' => true]]);
         app(PlatformAuditLogger::class)->record('compliance.kyc.decision', KycCase::class, $case->id, $request, $previous, ['status' => $case->status], $case->status, null, ['reason' => $request->string('reason')->toString(), 'sandbox_only' => true]);
         return response()->json(['data' => $case->refresh(), 'message' => 'Manual compliance decision recorded. Mock screening does not auto-approve.', 'sandbox_only' => true]);
+    }
+
+    public function requestKycInfo(Request $request, KycCase $case): JsonResponse
+    {
+        $data = $request->validate(['reason' => ['required', 'string', 'max:2000'], 'challenge_id' => ['required', 'uuid'], 'challenge_code' => ['required', 'string', 'max:64']]);
+        app(PlatformAdminAccessService::class)->assertSensitive($request->user(), 'compliance.decide', $data['challenge_id'], $data['challenge_code']);
+        abort_if(in_array($case->status, ['approved', 'rejected'], true), 422, 'This KYC case is already finalized.');
+        $from = $case->status;
+        $case->update(['status' => 'additional_information_required', 'reviewed_at' => null]);
+        DB::table('kyc_reviews')->insert(['id' => (string) \Illuminate\Support\Str::uuid(), 'kyc_case_id' => $case->id, 'reviewer_id' => $request->user()->id, 'decision' => 'request_info', 'notes' => $data['reason'], 'created_at' => now(), 'updated_at' => now()]);
+        $case->statusEvents()->create(['actor_id' => $request->user()->id, 'from_status' => $from, 'to_status' => 'additional_information_required', 'reason' => $data['reason'], 'metadata' => ['sandbox_only' => true]]);
+        app(PlatformAuditLogger::class)->record('compliance.kyc.request_info', KycCase::class, $case->id, $request, ['status' => $from], ['status' => 'additional_information_required'], 'additional_information_required', null, ['reason' => $data['reason'], 'sandbox_only' => true]);
+
+        return response()->json(['data' => $case->fresh(['statusEvents']), 'message' => 'Additional information requested from the customer.', 'sandbox_only' => true]);
     }
 
     public function financial(Request $request): JsonResponse

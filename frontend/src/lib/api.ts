@@ -48,6 +48,7 @@ export type ApiError = Error & { status?: number; payload?: { message?: string; 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const method = (init.method || 'GET').toUpperCase();
   if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) await ensureCsrfCookie();
+  const isFormData = typeof FormData !== 'undefined' && init.body instanceof FormData;
   const send = () => {
     const xsrfToken = readXsrfToken();
     return fetch(`${API_URL}${path}`, {
@@ -55,7 +56,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
       credentials: 'include',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
         'X-Requested-With': 'XMLHttpRequest',
         ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
         ...(init.headers || {}),

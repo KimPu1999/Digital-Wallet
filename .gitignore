@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+vendor/
+dist/
+frontend/tsconfig.tsbuildinfo
+backend/.phpunit.result.cache
+backend/storage/*.key
+backend/storage/logs/*.log

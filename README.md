@@ -52,3 +52,14 @@ The environment used to prepare this foundation could not resolve Packagist, so 
 - Add role/permission middleware and server-side admin provisioning.
 - Add real test fixtures using a separate test database.
 - Design and review the double-entry ledger before enabling any financial endpoint.
+
+## Phase 2 commands
+
+```bash
+cd backend
+php artisan db:seed
+php artisan admin:provision admin@example.com "Platform Admin" --role=platform_super_admin
+php artisan test
+```
+
+Phase 2 adds country eligibility, separate merchant/admin authentication endpoints, email/password recovery hooks, MFA enrollment, private KYC document intake, and compliance schema. Financial capabilities remain disabled by the default seeder.

@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Concerns\HasUuids; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\BelongsTo;
+class NotificationPreference extends Model { use HasUuids; public $incrementing=false; protected $keyType='string'; protected $fillable=['user_id','transaction_email','transaction_sms','transaction_push','support_email','support_push','product_email','marketing_email','marketing_sms','marketing_push']; protected $casts=['transaction_email'=>'boolean','transaction_sms'=>'boolean','transaction_push'=>'boolean','support_email'=>'boolean','support_push'=>'boolean','product_email'=>'boolean','marketing_email'=>'boolean','marketing_sms'=>'boolean','marketing_push'=>'boolean']; public function user(): BelongsTo { return $this->belongsTo(User::class); } }

@@ -38,3 +38,7 @@ Payment amounts are BIGINT minor units with explicit ISO currency codes. The exi
 The security migration adds customer risk profiles, versioned risk rules/evaluations, alerts, screening requests/matches, compliance cases/events/evidence, device registrations, authentication security events, regulatory report drafts, and security policy versions. It intentionally reuses Phase 9 risk_cases, platform approvals, and platform audit events rather than duplicating them.
 
 Sensitive references are hidden from API serialization. Foreign keys, scoped unique keys, and indexes protect ownership and idempotency boundaries. Posted ledger tables are unchanged.
+
+## Phase 11 tables
+
+The communication migration adds Laravel-compatible notifications, preferences, templates, deliveries, event receipts, support tickets/messages/attachments/events/assignments, versioned SLA policies, and dispute cases/events. The notification event receipt and support message client key are idempotency boundaries.

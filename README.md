@@ -122,3 +122,7 @@ Phase 2 adds country eligibility, separate merchant/admin authentication endpoin
 Phase 10 adds explainable AML/fraud monitoring, mock sanctions screening, device/session security records, and platform compliance case management. These features are sandbox-only. They do not provide regulatory clearance, submit reports, alter balances, or enable live financial operations.
 
 Useful monitoring routes include /api/v1/platform/security/overview, /api/v1/platform/aml/alerts, /api/v1/platform/screening/matches, /api/v1/platform/fraud/alerts, and /api/v1/platform/compliance/cases. Access requires an authorized platform role and verified MFA. Customer security data is available under /api/v1/security/* and is owner-scoped.
+
+## Phase 11 communication sandbox
+
+Phase 11 adds in-app notifications, preferences, mock-safe external channels, customer and merchant support tickets, private attachment intake, SLA records, and separate dispute cases. External email/SMS/push are not reported as delivered without provider evidence. Support and dispute actions never change ledger balances or enable live money movement.

@@ -21,6 +21,10 @@ use App\Http\Controllers\Api\V1\MerchantCheckoutController;
 use App\Http\Controllers\Api\V1\PlatformAdminController;
 use App\Http\Controllers\Api\V1\PlatformSecurityController;
 use App\Http\Controllers\Api\V1\SecurityController;
+use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\SupportController;
+use App\Http\Controllers\Api\V1\DisputeController;
+use App\Http\Controllers\Api\V1\PlatformNotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -83,6 +87,22 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/auth/mfa/recovery', [AuthController::class, 'mfaRecovery']);
         Route::get('/kyc', [KycController::class, 'show']);
         Route::post('/kyc/documents', [KycController::class, 'submit']);
+        Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::patch('/notifications/{id}/read', [NotificationController::class, 'read']);
+        Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead']);
+        Route::get('/notification-preferences', [NotificationController::class, 'preferences']);
+        Route::patch('/notification-preferences', [NotificationController::class, 'updatePreferences']);
+        Route::get('/support/tickets', [SupportController::class, 'customerIndex']);
+        Route::post('/support/tickets', [SupportController::class, 'customerCreate'])->middleware('throttle:transfers');
+        Route::get('/support/tickets/{id}', [SupportController::class, 'customerShow']);
+        Route::post('/support/tickets/{id}/messages', [SupportController::class, 'customerMessage'])->middleware('throttle:transfers');
+        Route::post('/support/tickets/{id}/attachments', [SupportController::class, 'attachment'])->middleware('throttle:transfers');
+        Route::get('/merchant/support/tickets', [SupportController::class, 'merchantIndex']);
+        Route::post('/merchant/support/tickets', [SupportController::class, 'merchantCreate'])->middleware('throttle:transfers');
+        Route::get('/disputes', [DisputeController::class, 'index']);
+        Route::post('/disputes', [DisputeController::class, 'create'])->middleware('throttle:transfers');
+        Route::get('/disputes/{id}', [DisputeController::class, 'show']);
         Route::prefix('security')->group(function (): void {
             Route::get('/overview', [SecurityController::class, 'overview']);
             Route::get('/sessions', [SecurityController::class, 'sessions']);
@@ -137,6 +157,17 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/compliance/reports', [PlatformSecurityController::class, 'reports'])->middleware('platform.admin:compliance.read');
             Route::post('/compliance/reports/drafts', [PlatformSecurityController::class, 'createReport'])->middleware('platform.admin:compliance.decide');
             Route::get('/compliance/risk-profiles', [PlatformSecurityController::class, 'riskProfiles'])->middleware('platform.admin:risk.read');
+            Route::get('/support/tickets', [SupportController::class, 'adminIndex'])->middleware('platform.admin:support.read');
+            Route::get('/support/tickets/{id}', [SupportController::class, 'adminShow'])->middleware('platform.admin:support.read');
+            Route::post('/support/tickets/{id}/assign', [SupportController::class, 'assign'])->middleware('platform.admin:support.manage');
+            Route::post('/support/tickets/{id}/reply', [SupportController::class, 'adminReply'])->middleware('platform.admin:support.manage');
+            Route::post('/support/tickets/{id}/transition', [SupportController::class, 'transition'])->middleware('platform.admin:support.manage');
+            Route::get('/notifications/overview', [PlatformNotificationController::class, 'overview'])->middleware('platform.admin:support.read');
+            Route::get('/notifications/templates', [PlatformNotificationController::class, 'templates'])->middleware('platform.admin:support.read');
+            Route::get('/notifications/deliveries', [PlatformNotificationController::class, 'deliveries'])->middleware('platform.admin:support.read');
+            Route::get('/notifications/failures', [PlatformNotificationController::class, 'failures'])->middleware('platform.admin:support.read');
+            Route::get('/disputes', [DisputeController::class, 'platformIndex'])->middleware('platform.admin:support.read');
+            Route::post('/disputes/{id}/transition', [DisputeController::class, 'platformTransition'])->middleware('platform.admin:support.manage');
         });
         Route::post('/checkout/{token}/wallet-pay', [MerchantCheckoutController::class, 'walletPay'])->middleware('throttle:transfers');
         Route::post('/qr/{token}/wallet-pay', [MerchantCheckoutController::class, 'qrWalletPay'])->middleware('throttle:transfers');

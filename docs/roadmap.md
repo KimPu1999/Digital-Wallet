@@ -20,3 +20,11 @@
 - Platform-protected security, AML, screening, fraud, and case monitoring routes.
 
 Phase 11 should add production-provider governance, jurisdiction-specific policy approval, independently reviewed alert workflows, and PostgreSQL integration/concurrency coverage before any live capability.
+
+## Phase 11 delivered
+
+- Deduplicated in-app notification events and preference records.
+- Mock-safe email, SMS, push, and in-app channel adapters.
+- Customer and merchant support tickets with internal-note privacy.
+- Agent assignment, SLA due times, status transitions, and secure attachment intake.
+- Separate dispute case lifecycle and platform communication dashboards.

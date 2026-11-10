@@ -36,3 +36,5 @@ Platform access uses separate memberships and fine-grained permissions for super
 AML and fraud decisions are deterministic, explainable, versioned, and fail closed to review when required screening is unavailable. Potential matches are never confirmed automatically. Evidence access is restricted, raw document paths are not exposed, and customer security records are owner-scoped.
 
 Production prerequisites remain: approved screening data providers, jurisdiction-specific monitoring policy, MFA enforcement, retention/deletion schedules, encryption and key management, analyst procedures, regulatory advice, and PostgreSQL-backed concurrency testing.
+
+Phase 11 adds owner-scoped notification and support queries, merchant membership checks, internal-note visibility, private attachment storage, MIME/size validation, sanitized template interpolation, mock-only external channels, and platform support permissions. Provider secrets are not stored or returned.

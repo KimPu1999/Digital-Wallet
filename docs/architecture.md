@@ -45,3 +45,7 @@ Platform administration is separated from customer and merchant tenancy. A platf
 ## Phase 10 security and compliance monitoring
 
 The monitoring domain wraps existing financial data without becoming a financial posting path. Risk rules are versioned, evaluations are idempotent, alerts are explainable, screening providers are adapters, and compliance cases are auditable. Monitoring APIs are read-only for financial records; sensitive case decisions require platform roles and MFA.
+
+## Phase 11 communication boundary
+
+Notifications, support tickets, attachments, and disputes are separate domains. Notification event receipts deduplicate messages and delivery records distinguish local/mock queueing from evidence-backed delivery. Support messages have customer/internal visibility, merchant ownership is derived through MerchantAccessService, and disputes never mutate financial state.

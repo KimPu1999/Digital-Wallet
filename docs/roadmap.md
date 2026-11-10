@@ -35,3 +35,9 @@ Read-only multi-currency financial reporting, merchant analytics, report runs, p
 ## Phase 13 infrastructure foundation
 
 Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, and deployment-safety foundations are documented and templated. Provider-specific infrastructure, restore evidence, actual telemetry, and production approvals remain outstanding.
+
+# Phase 14 — QA and release assurance
+
+- Maintain an evidence-backed QA test-run, finding, performance and recovery model.
+- Keep release gates blocked when required evidence is absent.
+- Complete PostgreSQL concurrency, browser accessibility, load, dependency, container and restore validation in isolated CI/staging environments before any production approval.

@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\V1\DisputeController;
 use App\Http\Controllers\Api\V1\PlatformNotificationController;
 use App\Http\Controllers\Api\V1\PlatformReportController;
 use App\Http\Controllers\Api\V1\MerchantReportController;
+use App\Http\Controllers\Api\V1\PlatformQaController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -170,6 +171,12 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/notifications/failures', [PlatformNotificationController::class, 'failures'])->middleware('platform.admin:support.read');
             Route::get('/disputes', [DisputeController::class, 'platformIndex'])->middleware('platform.admin:support.read');
             Route::post('/disputes/{id}/transition', [DisputeController::class, 'platformTransition'])->middleware('platform.admin:support.manage');
+            Route::get('/qa/overview', [PlatformQaController::class, 'overview'])->middleware('platform.admin:dashboard.read');
+            Route::get('/qa/test-runs', [PlatformQaController::class, 'testRuns'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/findings', [PlatformQaController::class, 'findings'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/performance', [PlatformQaController::class, 'performance'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/recovery', [PlatformQaController::class, 'recovery'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/release-readiness', [PlatformQaController::class, 'releaseReadiness'])->middleware('platform.admin:dashboard.read');
             Route::get('/reports/overview', [PlatformReportController::class, 'overview'])->middleware('platform.admin:financial.read');
             Route::get('/reports/revenue', [PlatformReportController::class, 'revenue'])->middleware('platform.admin:financial.read');
             Route::get('/reports/transaction-volume', [PlatformReportController::class, 'transactionVolume'])->middleware('platform.admin:financial.read');

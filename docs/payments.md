@@ -23,3 +23,5 @@ The sandbox mock provider is the only enabled provider. Stripe, Wise Platform, a
 ## API
 
 Customer routes include GET /payment-methods, deposit/withdrawal intent creation, GET /payments, payment detail/timeline, and the signed webhook endpoint. Admin routes are read-only monitoring for payments, providers, webhooks, settlement batches, and reconciliation exceptions.
+
+Phase 8 adds merchant payment links, hosted checkout session metadata, static/dynamic QR references, sandbox wallet checkout, refund requests, and projected settlement reporting. A provider authorization or QR scan is not final settlement. See merchant-checkout.md, payment-links.md, qr-payments.md, and merchant-api.md.

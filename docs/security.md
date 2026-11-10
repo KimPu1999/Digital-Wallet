@@ -23,3 +23,7 @@ Production work must add provider credential isolation, stale-rate policy, circu
 Payment operations require authenticated ownership, email verification, country eligibility, configured KYC gates, server-side provider routing, scoped idempotency keys, and rate limiting. Withdrawals additionally require step-up MFA and an atomic wallet hold. Provider webhooks verify signatures and replay windows before event deduplication and settlement. Customer, merchant, and platform-admin reads remain isolated by policy and role middleware.
 
 Provider credentials are encrypted/server-side only. Raw PAN/CVV and bank credentials are not accepted. Production requires hosted/tokenized collection, MFA enforcement, fraud/AML monitoring, provider allowlists, secrets rotation, restricted database roles, backup/restore tests, incident response, and regulatory approval appropriate to the operating model.
+
+## Phase 8 controls
+
+Merchant links, checkout sessions, and QR references use opaque bearer tokens whose hashes are stored at rest. Wallet checkout requires customer ownership, email verification, step-up MFA, scoped idempotency, deterministic ledger locks, and a successful balanced journal. Refunds require merchant authorization and compensate the original ledger transaction. Merchant API keys are SHA-256 hashed, scoped, expirable, revocable, and shown once. Webhook endpoints require public HTTPS and reject private/internal destinations to reduce SSRF risk; signing secrets are encrypted. These are sandbox controls and still require independent review before production.

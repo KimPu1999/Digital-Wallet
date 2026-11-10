@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\TransferController;
 use App\Http\Controllers\Api\V1\AdminTransferController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\AdminPaymentController;
+use App\Http\Controllers\Api\V1\MerchantCheckoutController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -26,6 +27,8 @@ Route::prefix('v1')->group(function (): void {
     Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:auth');
     Route::post('/auth/admin/login', [AuthController::class, 'adminLogin'])->middleware('throttle:auth');
     Route::post('/webhooks/payments/{provider}', [PaymentController::class, 'webhook'])->middleware('throttle:auth');
+    Route::get('/checkout/{token}', [MerchantCheckoutController::class, 'publicCheckout']);
+    Route::get('/qr/{token}', [MerchantCheckoutController::class, 'publicQr']);
     Route::post('/auth/password/forgot', [PasswordController::class, 'forgot'])->middleware('throttle:auth');
     Route::post('/auth/password/reset', [PasswordController::class, 'reset'])->middleware('throttle:auth');
     Route::middleware('auth:sanctum')->group(function (): void {
@@ -77,6 +80,27 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/auth/mfa/recovery', [AuthController::class, 'mfaRecovery']);
         Route::get('/kyc', [KycController::class, 'show']);
         Route::post('/kyc/documents', [KycController::class, 'submit']);
+        Route::post('/checkout/{token}/wallet-pay', [MerchantCheckoutController::class, 'walletPay'])->middleware('throttle:transfers');
+        Route::post('/qr/{token}/wallet-pay', [MerchantCheckoutController::class, 'qrWalletPay'])->middleware('throttle:transfers');
+        Route::prefix('merchants/{merchant}')->group(function (): void {
+            Route::get('/payment-links', [MerchantCheckoutController::class, 'links']);
+            Route::post('/payment-links', [MerchantCheckoutController::class, 'createLink'])->middleware('throttle:transfers');
+            Route::patch('/payment-links/{link}', [MerchantCheckoutController::class, 'updateLink']);
+            Route::get('/checkout-sessions', [MerchantCheckoutController::class, 'sessions']);
+            Route::post('/checkout-sessions', [MerchantCheckoutController::class, 'createSession'])->middleware('throttle:transfers');
+            Route::get('/qr-codes', [MerchantCheckoutController::class, 'qrs']);
+            Route::post('/qr-codes', [MerchantCheckoutController::class, 'createQr'])->middleware('throttle:transfers');
+            Route::get('/refunds', [MerchantCheckoutController::class, 'refunds']);
+            Route::post('/refunds', [MerchantCheckoutController::class, 'requestRefund'])->middleware('throttle:transfers');
+            Route::post('/refunds/{refund}/approve', [MerchantCheckoutController::class, 'approveRefund'])->middleware('throttle:transfers');
+            Route::get('/settlements', [MerchantCheckoutController::class, 'settlements']);
+            Route::get('/analytics', [MerchantCheckoutController::class, 'analytics']);
+            Route::get('/api-keys', [MerchantCheckoutController::class, 'apiKeys']);
+            Route::post('/api-keys', [MerchantCheckoutController::class, 'createApiKey'])->middleware('throttle:transfers');
+            Route::post('/api-keys/{key}/revoke', [MerchantCheckoutController::class, 'revokeApiKey'])->middleware('throttle:transfers');
+            Route::get('/webhook-endpoints', [MerchantCheckoutController::class, 'webhookEndpoints']);
+            Route::post('/webhook-endpoints', [MerchantCheckoutController::class, 'createWebhookEndpoint'])->middleware('throttle:transfers');
+        });
         Route::middleware('role:platform_super_admin,compliance_admin,support_agent')->prefix('admin')->group(function (): void {
             Route::get('/wallets', [AdminWalletController::class, 'index']);
             Route::get('/wallets/{wallet}', [AdminWalletController::class, 'show']);

@@ -32,3 +32,9 @@ Transfers are a separate command domain above wallets, holds, ledger, FX, compli
 Payments are a separate orchestration domain above the existing wallet, ledger, hold, compliance, and audit boundaries. A payment intent is not a ledger transaction. A provider attempt is not settlement. Only PaymentSettlementService can bridge a verified provider transaction to the internal ledger, and it uses the existing idempotent LedgerPostingService or WalletHoldService.
 
 The provider port is adapter-based: registry, capability/routing, adapter attempt, verified webhook, provider transaction, then settlement/reconciliation. Production provider adapters are disabled by configuration and no customer route accepts arbitrary provider or ledger identifiers. Merchant payment intents are scoped by merchant memberships and remain non-live.
+
+## Phase 8 merchant commerce boundary
+
+Merchant checkout resources sit above payment intents and the ledger. Payment links and QR records expose only opaque public tokens; hashes are stored server-side. Checkout sessions expire and become paid only after a verified wallet checkout posts a balanced journal. Refunds are new compensating journals and cannot edit the original payment. Settlement reporting is an internal projection and remains `projected` until matching provider evidence exists.
+
+Hosted checkout, API keys, and merchant webhooks are integration boundaries, not proof of payment. Provider-hosted card collection is disabled in the sandbox. API keys are hashed, scoped, revocable, and merchant-isolated. Webhook URLs pass SSRF checks and signing secrets are encrypted; delivery is represented by queued records until a reviewed worker is enabled.

@@ -32,3 +32,7 @@ Financial commands use a scoped idempotency key and SHA-256 request fingerprint.
 ## Transfer settlement integration
 
 Sandbox internal transfers use the existing wallet-hold capture path and immutable ledger posting service. No transfer service writes a balance directly. A future external settlement callback must be authenticated, idempotent, state-validated, and reconciled against the transfer hold and ledger transaction before completion.
+
+## Merchant checkout and refunds
+
+Wallet checkout debits the customer wallet liability and credits the merchant wallet liability in the same currency. The payment intent and checkout session are updated only after the balanced journal posts. A refund credits the customer liability and debits the merchant liability through a new compensating journal linked to the refund request; the original posted entries remain immutable. Merchant settlement reports are derived summaries and are not ledger postings without matching settlement evidence.

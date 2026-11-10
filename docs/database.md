@@ -25,3 +25,7 @@ Phase 6 adds beneficiaries and beneficiary_accounts, transfer_quotes, transfers,
 payment_providers, provider_accounts, provider_capabilities, provider_routing_rules, and provider_health_events describe provider configuration without plaintext credentials. payment_intents, payment_attempts, and provider_transactions record lifecycle and external observations. payment_webhook_events stores encrypted raw bodies and processing state. settlement_batches and settlement_items match provider settlement to ledger references. payment_reconciliation_items stores exceptions and never silently changes balances.
 
 Payment amounts are BIGINT minor units with explicit ISO currency codes. The existing ledger remains the financial source of truth; no payment table contains a mutable customer balance.
+
+## Phase 8 merchant tables
+
+`merchant_payment_links`, `checkout_sessions`, `merchant_qr_codes`, `refund_requests`, `merchant_settlements`, `merchant_api_keys`, `merchant_webhook_endpoints`, `merchant_webhook_deliveries`, and `merchant_checkout_settings` are merchant-scoped. Public link, checkout, and QR values are stored as hashes; amounts are BIGINT minor units; settlement status defaults to `projected`. Refund requests reference a payment intent and, after approval, a compensating ledger transaction. No table is a balance source of truth.

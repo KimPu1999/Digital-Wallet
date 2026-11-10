@@ -1,6 +1,6 @@
 # Digital Wallet Platform
 
-Phase 7 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances, FX conversions, transfers, deposits, withdrawals, provider callbacks, and settlement records are demo/test state. Real deposits, payouts, banking rails, card collection, and production payment processing are not enabled.
+Phase 8 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances, FX conversions, transfers, deposits, withdrawals, provider callbacks, merchant checkout, payment links, QR references, refunds, and settlement records are demo/test state. Real deposits, payouts, banking rails, card collection, merchant acceptance, and production payment processing are not enabled.
 
 ## Requirements
 
@@ -80,7 +80,11 @@ Transfer beneficiaries, quotes, step-up challenges, limits, screening records, h
 
 Payment intents and provider monitoring use /api/v1/payments, /api/v1/webhooks/payments/{provider}, and the read-only /api/v1/admin payment routes. Deposits require a verified mock webhook before sandbox ledger settlement. Withdrawals require step-up MFA and reserve a wallet hold; only a verified provider success can capture it. Unknown provider outcomes remain pending reconciliation and are never blindly retried.
 
-## Phase 7 readiness and limitations
+## Merchant checkout sandbox
+
+Merchant operations use `/api/v1/merchants/{merchant}` for payment links, checkout sessions, QR references, refunds, projected settlements, analytics, test API keys, and webhook endpoint registration. Customer wallet checkout is the only executable merchant payment path. Hosted card collection is not enabled because provider adapters remain explicit test-mode/unsupported boundaries. Payment link and checkout tokens are opaque bearer values; QR generation is not proof of payment; refunds post compensating ledger entries; settlements remain `projected` without provider evidence. The merchant console is available at `/merchant` and related routes.
+
+## Phase 8 readiness and limitations
 
 - Provision a clean PostgreSQL database and run migrations.
 - Install Laravel/Sanctum dependencies and configure stateful domains and CORS.
@@ -91,6 +95,8 @@ Payment intents and provider monitoring use /api/v1/payments, /api/v1/webhooks/p
 - Configure an approved hosted collection/tokenization flow; never accept raw card data.
 - Complete provider account approval, compliance review, dual control, fraud controls, and operational runbooks.
 - Do not enable production environment providers until legal, regulatory, safeguarding, reconciliation, incident response, and security reviews are complete.
+- Run merchant checkout, refund, webhook, and PostgreSQL concurrency tests against a separate PostgreSQL test database.
+- Add a reviewed API-key authentication gateway, signed merchant webhook worker, provider-hosted checkout, chargeback handling, and settlement evidence before any live merchant acceptance.
 
 ## Commands
 
@@ -99,4 +105,4 @@ cd backend
 php artisan test
 ```
 
-Phase 2 adds country eligibility, separate merchant/admin authentication endpoints, email/password recovery hooks, MFA enrollment, private KYC document intake, and compliance schema. Phase 3 adds multi-currency wallet metadata. Phase 4 adds the immutable ledger and holds. Phase 5 adds sandbox FX. Phase 6 adds sandbox transfers. Phase 7 adds provider ports, payment intents, signed mock webhooks, payout holds, settlement records, and reconciliation monitoring. Financial capabilities remain sandbox-only.
+Phase 2 adds country eligibility, separate merchant/admin authentication endpoints, email/password recovery hooks, MFA enrollment, private KYC document intake, and compliance schema. Phase 3 adds multi-currency wallet metadata. Phase 4 adds the immutable ledger and holds. Phase 5 adds sandbox FX. Phase 6 adds sandbox transfers. Phase 7 adds provider ports, payment intents, signed mock webhooks, payout holds, settlement records, and reconciliation monitoring. Phase 8 adds merchant checkout resources, opaque payment links, QR references, wallet checkout, refund accounting, projected settlements, test API keys, and SSRF-protected webhook registration. Financial capabilities remain sandbox-only.

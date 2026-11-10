@@ -13,6 +13,12 @@ Artisan::command('inspire', function (): void {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('test {--filter=}', function (): int {
+    putenv('APP_ENV=testing');
+    putenv('DB_CONNECTION=sqlite');
+    putenv('DB_DATABASE=:memory:');
+    putenv('CACHE_STORE=array');
+    putenv('SESSION_DRIVER=array');
+    putenv('QUEUE_CONNECTION=sync');
     $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg(base_path('vendor/bin/phpunit'));
     if ($filter = $this->option('filter')) {
         $command .= ' --filter '.escapeshellarg($filter);

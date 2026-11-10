@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Resources;
+use Illuminate\Http\Request; use Illuminate\Http\Resources\Json\JsonResource;
+class WalletResource extends JsonResource { public function toArray(Request $request): array { return ['id'=>$this->id,'nickname'=>$this->nickname,'label'=>$this->label,'wallet_type'=>$this->wallet_type,'status'=>$this->status,'owner'=>['id'=>$this->owner?->id,'type'=>$this->owner?->owner_type,'user_id'=>$this->owner?->user_id,'merchant_id'=>$this->owner?->merchant_id],'currency_accounts'=>WalletCurrencyAccountResource::collection($this->whenLoaded('currencyAccounts')),'preferences'=>new WalletPreferenceResource($this->whenLoaded('preferences')),'financial_data'=>['available_balance'=>null,'pending_balance'=>null,'source_of_truth'=>'Phase 4 ledger not enabled'],'created_at'=>$this->created_at,'updated_at'=>$this->updated_at]; } }

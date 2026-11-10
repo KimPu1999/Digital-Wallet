@@ -11,3 +11,8 @@ Phase 3 adds server-derived wallet ownership, merchant membership scoping, email
 Before production, complete MFA enforcement for privileged actions, KYC/AML policy review, fraud and sanctions monitoring, encryption and key management, backup/restore testing, security headers, dependency scanning, abuse/rate-limit tuning, privacy review, incident response, and regulatory/legal approval. Do not enable money movement until the Phase 4 ledger and operational controls are independently reviewed.
 
 Phase 4 adds deterministic ledger-account locks, projection locks for holds, scoped idempotency fingerprints, immutable financial records, authorization-aware wallet balance/activity reads, and read-only admin ledger APIs. PostgreSQL must be the test database for concurrency, transaction isolation, deferred balance triggers, and immutable-record enforcement before production use. The current local environment has no reachable PostgreSQL service.
+## Phase 5 controls
+
+FX quote and conversion routes require Sanctum authentication, wallet policy ownership/access, country FX capability, server-side validation, per-user rate limits, scoped idempotency, and audit events. Quotes and conversions are marked sandbox_only. The only registered provider is a deterministic mock provider; provider errors do not silently fall back to another rate.
+
+Production work must add provider credential isolation, stale-rate policy, circuit breakers, market-data monitoring, rate manipulation controls, approval workflows, and PostgreSQL concurrency tests before enabling any external provider.

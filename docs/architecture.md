@@ -19,3 +19,6 @@ The future financial core is intentionally not enabled. Wallet rows describe acc
 ## Wallet lifecycle
 
 `requested → active metadata → suspended/closed` is represented by wallet status and append-only status history. In Phase 3, creation only establishes account metadata. It does not activate deposits, withdrawals, transfers, FX, payment processing, or settlement. Phase 4 must connect currency accounts to ledger accounts and define authorization, idempotency, posting, reconciliation, and operational controls before any action is enabled.
+## Phase 5 FX boundary
+
+FX is a bounded domain above the Phase 4 ledger. Provider adapters create rate snapshots; the quote service creates immutable, expiring quotes; the conversion service turns an accepted sandbox quote into a two-currency balanced ledger journal. Wallet metadata and projections remain separate from quote and conversion records. The customer API cannot submit arbitrary ledger lines.

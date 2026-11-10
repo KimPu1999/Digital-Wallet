@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Resources;
+use Illuminate\Http\Resources\Json\JsonResource;
+class FxQuoteResource extends JsonResource { public function toArray($request): array { return ['id'=>$this->id,'quote_reference'=>$this->quote_reference,'source_currency_code'=>$this->source_currency_code,'target_currency_code'=>$this->target_currency_code,'source_amount_minor'=>(int)$this->source_amount_minor,'estimated_target_amount_minor'=>(int)$this->estimated_target_amount_minor,'platform_fee_minor'=>(int)$this->platform_fee_minor,'mid_market_rate'=>(string)$this->mid_market_rate,'exchange_rate'=>(string)$this->exchange_rate,'provider_spread_bps'=>(int)$this->provider_spread_bps,'platform_markup_bps'=>(int)$this->platform_markup_bps,'status'=>$this->status,'expires_at'=>$this->expires_at,'is_expired'=>$this->isExpired(),'sandbox_only'=>(bool)$this->sandbox_only,'rounding_policy'=>$this->rounding_policy]; } }

@@ -56,3 +56,9 @@ Artisan::command('ledger:reconcile', function (): int {
     $this->info('Reconciliation '.$run->status.' with '.($run->summary['exceptions'] ?? 0).' exception(s).');
     return $run->status === 'completed' ? 0 : 1;
 })->purpose('Run a read-only ledger and projection reconciliation');
+
+Artisan::command('fx:reconcile', function (): int {
+    $summary = app(\App\Services\FxReconciliationService::class)->run();
+    $this->info('FX reconciliation '.$summary['status'].' with '.$summary['exceptions'].' exception(s).');
+    return $summary['exceptions'] === 0 ? 0 : 1;
+})->purpose('Check completed sandbox FX conversions against their ledger legs');

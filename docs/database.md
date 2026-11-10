@@ -13,3 +13,8 @@ Phase 2 adds `login_activities`, `active_sessions`, `mfa_methods`, `mfa_recovery
 Future provider and movement tables such as `transfers`, `deposits`, and `withdrawals` remain intentionally reserved until immutable amount storage, currency exponent rules, posting invariants, settlement, and compliance controls are approved.
 
 The Phase 4 migration now implements the ledger tables: `ledger_accounts`, `ledger_transactions`, `ledger_entries`, `ledger_reversals`, `balance_projections`, `wallet_holds`, `idempotency_keys`, `reconciliation_runs`, `reconciliation_items`, `financial_audit_events`, and `outbox_events`. Posted ledger entries, reversals, and financial audit events have PostgreSQL immutability triggers. A deferred PostgreSQL constraint trigger validates journal balance at the posted status boundary. SQLite migration runs intentionally skip PostgreSQL triggers and are not a substitute for financial locking tests.
+## Phase 5 tables
+
+fx_rate_providers, fx_pairs, fx_rate_snapshots, and fx_fee_rules hold provider configuration and observed quote inputs. fx_quotes is immutable after issuance. fx_conversions is the one-time execution record and links to a posted ledger transaction. fx_conversion_legs preserves the currency-specific accounting legs. fx_audit_events and fx_reconciliation_items support operational review.
+
+Rates use DECIMAL(36,18). Monetary values use BIGINT minor units. There is no FX balance column and no floating-point monetary calculation.

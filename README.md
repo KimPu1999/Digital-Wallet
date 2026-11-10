@@ -1,6 +1,6 @@
 # Digital Wallet Platform
 
-Phase 4 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances are internal/demo state, and real deposits, withdrawals, transfers, FX, or payment processing are not enabled.
+Phase 5 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances and FX conversions are internal/demo state, and real deposits, withdrawals, transfers, external FX, or payment processing are not enabled.
 
 ## Requirements
 
@@ -8,6 +8,7 @@ Phase 4 foundation for a professional digital wallet product. This repository is
 - PHP 8.2+
 - Composer
 - PostgreSQL 15+
+- PHP BCMath extension (required for decimal-safe FX quote calculations)
 
 ## Setup
 
@@ -60,9 +61,14 @@ The seed catalog contains USD, EUR, GBP, SGD, THB, and MMK. Currency availabilit
 cd backend
 php artisan ledger:seed-accounts
 php artisan ledger:reconcile
+php artisan fx:reconcile
 ```
 
-Ledger posting is internal-only. The customer and merchant APIs expose read-only balances and ledger activity; there are no public journal, deposit, withdrawal, transfer, hold, capture, or reversal commands.
+Ledger posting is internal-only. The customer and merchant APIs expose read-only balances and ledger activity; there are no public arbitrary journal, deposit, withdrawal, transfer, hold, capture, or reversal commands.
+
+## FX sandbox
+
+The seed creates deterministic sandbox pairs and fee rules. FX requires the authenticated user's country capability fx_enabled; this is a sandbox feature flag, not a regulatory, corridor, or provider approval. Quote creation and conversion use /api/v1/fx/*, require wallet access, and mark every response sandbox_only. Conversion execution requires an Idempotency-Key.
 
 ## Phase 3 readiness
 

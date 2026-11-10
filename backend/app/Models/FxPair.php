@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Concerns\HasUuids; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\HasMany;
+class FxPair extends Model { use HasUuids; public $incrementing=false; protected $keyType='string'; protected $fillable=['base_currency_code','quote_currency_code','is_enabled','provider_available','min_amount_minor','max_amount_minor','quote_expiry_seconds','country_eligibility','risk_restrictions']; protected $casts=['is_enabled'=>'boolean','provider_available'=>'boolean','country_eligibility'=>'array','risk_restrictions'=>'array']; public function snapshots(): HasMany { return $this->hasMany(FxRateSnapshot::class,'pair_id'); } public function feeRules(): HasMany { return $this->hasMany(FxFeeRule::class,'pair_id'); } }

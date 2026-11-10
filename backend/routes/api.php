@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\VerificationController;
 use App\Http\Controllers\Api\V1\WalletController;
 use App\Http\Controllers\Api\V1\WalletFinancialController;
 use App\Http\Controllers\Api\V1\AdminLedgerController;
+use App\Http\Controllers\Api\V1\FxController;
+use App\Http\Controllers\Api\V1\AdminFxController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -36,6 +38,12 @@ Route::prefix('v1')->group(function (): void {
         Route::get('/dashboard/wallet-overview', [WalletController::class, 'overview']);
         Route::get('/wallets/{wallet}/balance', [WalletFinancialController::class, 'balance']);
         Route::get('/wallets/{wallet}/ledger-activity', [WalletFinancialController::class, 'activity']);
+        Route::get('/fx/pairs', [FxController::class, 'pairs']);
+        Route::post('/fx/quotes', [FxController::class, 'quote'])->middleware('throttle:fx');
+        Route::get('/fx/quotes/{quote}', [FxController::class, 'showQuote']);
+        Route::post('/fx/quotes/{quote}/convert', [FxController::class, 'convert'])->middleware('throttle:fx-conversion');
+        Route::get('/fx/conversions', [FxController::class, 'conversions']);
+        Route::get('/fx/conversions/{conversion}', [FxController::class, 'conversion']);
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::get('/auth/mfa', [AuthController::class, 'mfaStatus']);
         Route::post('/auth/mfa/enroll', [AuthController::class, 'mfaEnroll']);
@@ -51,6 +59,12 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/ledger/transactions/{transaction}', [AdminLedgerController::class, 'transaction']);
             Route::get('/ledger/reconciliation', [AdminLedgerController::class, 'reconciliation']);
             Route::get('/ledger/audit-events', [AdminLedgerController::class, 'auditEvents']);
+            Route::get('/fx/overview', [AdminFxController::class, 'overview']);
+            Route::get('/fx/quotes', [AdminFxController::class, 'quotes']);
+            Route::get('/fx/conversions', [AdminFxController::class, 'conversions']);
+            Route::get('/fx/providers', [AdminFxController::class, 'providers']);
+            Route::get('/fx/reconciliation', [AdminFxController::class, 'reconciliation']);
+            Route::get('/fx/audit-events', [AdminFxController::class, 'auditEvents']);
         });
     });
 });

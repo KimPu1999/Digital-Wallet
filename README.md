@@ -117,3 +117,8 @@ php artisan test
 ```
 
 Phase 2 adds country eligibility, separate merchant/admin authentication endpoints, email/password recovery hooks, MFA enrollment, private KYC document intake, and compliance schema. Phase 3 adds multi-currency wallet metadata. Phase 4 adds the immutable ledger and holds. Phase 5 adds sandbox FX. Phase 6 adds sandbox transfers. Phase 7 adds provider ports, payment intents, signed mock webhooks, payout holds, settlement records, and reconciliation monitoring. Phase 8 adds merchant checkout resources, opaque payment links, QR references, wallet checkout, refund accounting, projected settlements, test API keys, and SSRF-protected webhook registration. Phase 9 adds platform roles, permissions, approvals, audit operations, compliance/risk monitoring, settings history, and system health. Financial capabilities remain sandbox-only.
+## Phase 10 security sandbox
+
+Phase 10 adds explainable AML/fraud monitoring, mock sanctions screening, device/session security records, and platform compliance case management. These features are sandbox-only. They do not provide regulatory clearance, submit reports, alter balances, or enable live financial operations.
+
+Useful monitoring routes include /api/v1/platform/security/overview, /api/v1/platform/aml/alerts, /api/v1/platform/screening/matches, /api/v1/platform/fraud/alerts, and /api/v1/platform/compliance/cases. Access requires an authorized platform role and verified MFA. Customer security data is available under /api/v1/security/* and is owner-scoped.

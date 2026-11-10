@@ -42,3 +42,6 @@ Hosted checkout, API keys, and merchant webhooks are integration boundaries, not
 ## Phase 9 platform operations boundary
 
 Platform administration is separated from customer and merchant tenancy. A platform membership maps a staff user to a platform role and permissions. The admin middleware checks the membership, active account, and verified MFA; sensitive service methods additionally consume a one-time step-up challenge. Approvals, security events, platform audit events, risk cases, feature flags, and versioned settings have separate records and are not mixed into wallet balances or merchant data.
+## Phase 10 security and compliance monitoring
+
+The monitoring domain wraps existing financial data without becoming a financial posting path. Risk rules are versioned, evaluations are idempotent, alerts are explainable, screening providers are adapters, and compliance cases are auditable. Monitoring APIs are read-only for financial records; sensitive case decisions require platform roles and MFA.

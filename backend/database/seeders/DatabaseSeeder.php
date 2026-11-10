@@ -11,5 +11,6 @@ class DatabaseSeeder extends Seeder {
         $this->call(TransferSeeder::class);
         $this->call(PaymentSeeder::class);
         $this->call(PlatformAdminSeeder::class);
+        $this->call(SecurityComplianceSeeder::class);
     }
 }

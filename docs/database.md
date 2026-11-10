@@ -33,3 +33,8 @@ Payment amounts are BIGINT minor units with explicit ISO currency codes. The exi
 ## Phase 9 platform operations tables
 
 `platform_admin_memberships`, `platform_roles`, `platform_permissions`, and `platform_role_permissions` provide the platform staff authorization graph. `admin_approval_requests` and `admin_approval_decisions` implement expiring maker-checker decisions. `admin_security_events` and `platform_audit_events` separate security/audit history from financial audit events. `risk_cases` and `risk_case_events` record investigation timelines. `platform_feature_flags`, `platform_settings`, and `platform_settings_history` keep operational configuration versioned. Financial flags are seeded disabled and no platform table stores a mutable wallet balance.
+## Phase 10 tables
+
+The security migration adds customer risk profiles, versioned risk rules/evaluations, alerts, screening requests/matches, compliance cases/events/evidence, device registrations, authentication security events, regulatory report drafts, and security policy versions. It intentionally reuses Phase 9 risk_cases, platform approvals, and platform audit events rather than duplicating them.
+
+Sensitive references are hidden from API serialization. Foreign keys, scoped unique keys, and indexes protect ownership and idempotency boundaries. Posted ledger tables are unchanged.

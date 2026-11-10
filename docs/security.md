@@ -31,3 +31,8 @@ Merchant links, checkout sessions, and QR references use opaque bearer tokens wh
 ## Phase 9 controls
 
 Platform access uses separate memberships and fine-grained permissions for super admin, compliance, finance, risk, support, and read-only audit roles. Verified MFA is required for all platform API reads; sensitive restrictions, compliance decisions, settings changes, and approval decisions require a one-time step-up challenge. Maker-checker prevents self-approval and supports dual approval. Admin APIs return safe identity metadata and document metadata only, never passwords, MFA secrets, provider credentials, raw API keys, signing secrets, or full identity documents.
+## Phase 10 controls
+
+AML and fraud decisions are deterministic, explainable, versioned, and fail closed to review when required screening is unavailable. Potential matches are never confirmed automatically. Evidence access is restricted, raw document paths are not exposed, and customer security records are owner-scoped.
+
+Production prerequisites remain: approved screening data providers, jurisdiction-specific monitoring policy, MFA enforcement, retention/deletion schedules, encryption and key management, analyst procedures, regulatory advice, and PostgreSQL-backed concurrency testing.

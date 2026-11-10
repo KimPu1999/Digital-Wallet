@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\AdminPaymentController;
 use App\Http\Controllers\Api\V1\MerchantCheckoutController;
 use App\Http\Controllers\Api\V1\PlatformAdminController;
+use App\Http\Controllers\Api\V1\PlatformSecurityController;
+use App\Http\Controllers\Api\V1\SecurityController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -81,6 +83,13 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/auth/mfa/recovery', [AuthController::class, 'mfaRecovery']);
         Route::get('/kyc', [KycController::class, 'show']);
         Route::post('/kyc/documents', [KycController::class, 'submit']);
+        Route::prefix('security')->group(function (): void {
+            Route::get('/overview', [SecurityController::class, 'overview']);
+            Route::get('/sessions', [SecurityController::class, 'sessions']);
+            Route::get('/devices', [SecurityController::class, 'devices']);
+            Route::get('/auth-events', [SecurityController::class, 'events']);
+            Route::post('/sessions/{session}/revoke', [SecurityController::class, 'revokeSession'])->middleware('throttle:auth');
+        });
         Route::prefix('admin/platform')->group(function (): void {
             Route::get('/overview', [PlatformAdminController::class, 'overview'])->middleware('platform.admin:dashboard.read');
             Route::get('/users', [PlatformAdminController::class, 'users'])->middleware('platform.admin:users.read');
@@ -103,6 +112,31 @@ Route::prefix('v1')->group(function (): void {
             Route::put('/feature-flags/{flag}', [PlatformAdminController::class, 'updateFeatureFlag'])->middleware('platform.admin:settings.manage');
             Route::get('/health', [PlatformAdminController::class, 'health'])->middleware('platform.admin:system.health');
             Route::post('/step-up', [PlatformAdminController::class, 'stepUp'])->middleware('platform.admin:system.health');
+        });
+        Route::prefix('platform')->group(function (): void {
+            Route::get('/security/overview', [PlatformSecurityController::class, 'overview'])->middleware('platform.admin:dashboard.read');
+            Route::get('/security/events', [PlatformSecurityController::class, 'securityEvents'])->middleware('platform.admin:security.read');
+            Route::get('/aml/transactions', [PlatformSecurityController::class, 'amlTransactions'])->middleware('platform.admin:financial.read');
+            Route::get('/aml/rules', [PlatformSecurityController::class, 'rules'])->middleware('platform.admin:risk.read');
+            Route::get('/aml/alerts', [PlatformSecurityController::class, 'alerts'])->middleware('platform.admin:risk.read');
+            Route::get('/aml/alerts/{alert}', [PlatformSecurityController::class, 'alert'])->middleware('platform.admin:risk.read');
+            Route::get('/screening/requests', [PlatformSecurityController::class, 'screeningRequests'])->middleware('platform.admin:compliance.read');
+            Route::get('/screening/matches', [PlatformSecurityController::class, 'screeningMatches'])->middleware('platform.admin:compliance.read');
+            Route::get('/screening/matches/{match}', [PlatformSecurityController::class, 'screeningMatch'])->middleware('platform.admin:compliance.read');
+            Route::get('/fraud/overview', [PlatformSecurityController::class, 'fraudOverview'])->middleware('platform.admin:risk.read');
+            Route::get('/fraud/alerts', [PlatformSecurityController::class, 'fraudAlerts'])->middleware('platform.admin:risk.read');
+            Route::get('/fraud/rules', [PlatformSecurityController::class, 'fraudRules'])->middleware('platform.admin:risk.read');
+            Route::get('/security/devices', [PlatformSecurityController::class, 'devices'])->middleware('platform.admin:risk.read');
+            Route::get('/security/sessions', [PlatformSecurityController::class, 'sessions'])->middleware('platform.admin:audit.read');
+            Route::get('/security/auth-events', [PlatformSecurityController::class, 'authEvents'])->middleware('platform.admin:audit.read');
+            Route::get('/compliance/cases', [PlatformSecurityController::class, 'cases'])->middleware('platform.admin:compliance.read');
+            Route::post('/compliance/cases', [PlatformSecurityController::class, 'createCase'])->middleware('platform.admin:compliance.decide');
+            Route::get('/compliance/cases/{case}', [PlatformSecurityController::class, 'case'])->middleware('platform.admin:compliance.read');
+            Route::post('/compliance/cases/{case}/events', [PlatformSecurityController::class, 'caseEvent'])->middleware('platform.admin:compliance.decide');
+            Route::get('/compliance/cases/{case}/evidence/{evidence}', [PlatformSecurityController::class, 'evidence'])->middleware('platform.admin:compliance.read');
+            Route::get('/compliance/reports', [PlatformSecurityController::class, 'reports'])->middleware('platform.admin:compliance.read');
+            Route::post('/compliance/reports/drafts', [PlatformSecurityController::class, 'createReport'])->middleware('platform.admin:compliance.decide');
+            Route::get('/compliance/risk-profiles', [PlatformSecurityController::class, 'riskProfiles'])->middleware('platform.admin:risk.read');
         });
         Route::post('/checkout/{token}/wallet-pay', [MerchantCheckoutController::class, 'walletPay'])->middleware('throttle:transfers');
         Route::post('/qr/{token}/wallet-pay', [MerchantCheckoutController::class, 'qrWalletPay'])->middleware('throttle:transfers');

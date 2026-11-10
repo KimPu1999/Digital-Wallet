@@ -10,3 +10,13 @@
 8. Phase 8: merchant payment links, hosted checkout boundary, QR references, sandbox wallet checkout, refund accounting, projected settlements, merchant API keys, webhook endpoint security, and merchant analytics. No live payments are enabled.
 9. Phase 9: platform admin roles and permissions, compliance/risk operations, maker-checker approvals, append-only audit surfaces, settings history, health monitoring, and currency-separated financial operations. No live payments are enabled.
 10. Phase 10: PostgreSQL concurrency certification, approved provider integrations, hosted/tokenized payment collection, production compliance controls, operational dual approval, fraud/chargeback operations, and regulatory/production authorization review.
+## Phase 10 delivered
+
+- Versioned sandbox risk rules and explainable alerts.
+- Screening provider abstraction with safe mock failure handling.
+- Fraud signals for authentication and device risk.
+- Customer-scoped security overview, devices, sessions, and auth events.
+- Compliance case lifecycle, restricted evidence metadata, and report drafts.
+- Platform-protected security, AML, screening, fraud, and case monitoring routes.
+
+Phase 11 should add production-provider governance, jurisdiction-specific policy approval, independently reviewed alert workflows, and PostgreSQL integration/concurrency coverage before any live capability.

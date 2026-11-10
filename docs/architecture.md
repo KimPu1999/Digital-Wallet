@@ -53,3 +53,7 @@ Notifications, support tickets, attachments, and disputes are separate domains. 
 ## Phase 12 reporting boundary
 
 `app/Domain/Reporting` is a read-only boundary over posted ledger entries and verified sandbox operational tables. It owns report definitions, bounded query parameters, report runs, snapshots, valuation metadata, private export references, and audit events. It cannot call ledger posting services.
+
+## Phase 13 runtime boundary
+
+Docker separates API, queue, scheduler, frontend, PostgreSQL, Redis, and the sandbox mock-provider network service. Production should place Nginx/load balancing at the HTTPS boundary and keep data services private. CI builds and tests artifacts; protected manual workflows provide approval gates without applying Terraform or enabling financial execution.

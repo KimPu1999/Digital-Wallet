@@ -41,3 +41,7 @@ Phase 11 adds owner-scoped notification and support queries, merchant membership
 ## Reporting security
 
 Platform report APIs require server-side financial or reconciliation permissions. Merchant reports require an authorized merchant membership and filter every query by merchant ID. Report ranges are bounded, arbitrary SQL is not accepted, exports are private and expiring, and CSV formula values are neutralized. Report APIs are read-only and cannot edit ledger entries or balances.
+
+## Infrastructure security
+
+Images do not include `.env` files or secrets, containers run as non-root where applicable, PostgreSQL/Redis are private in Compose, production secret values belong in a cloud secret manager, and production workflows require protected approval. CI includes dependency, secret, and container scanning steps. Provider-specific IAM, WAF, KMS/HSM, image signing, and actual telemetry remain deployment prerequisites.

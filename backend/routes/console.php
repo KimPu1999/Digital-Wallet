@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\PlatformAdminSeeder;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function (): void {
     $this->comment(Inspiring::quote());
@@ -66,3 +67,6 @@ Artisan::command('fx:reconcile', function (): int {
     $this->info('FX reconciliation '.$summary['status'].' with '.$summary['exceptions'].' exception(s).');
     return $summary['exceptions'] === 0 ? 0 : 1;
 })->purpose('Check completed sandbox FX conversions against their ledger legs');
+
+Schedule::command('ledger:reconcile')->hourly()->withoutOverlapping(20)->onOneServer();
+Schedule::command('fx:reconcile')->hourlyAt(15)->withoutOverlapping(20)->onOneServer();

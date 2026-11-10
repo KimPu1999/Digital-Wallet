@@ -1,0 +1,28 @@
+groups:
+  - name: wallet-platform
+    rules:
+      - alert: ApiHighErrorRate
+        expr: sum(rate(http_server_requests_total{status=~"5.."}[5m])) / sum(rate(http_server_requests_total[5m])) > 0.05
+        for: 10m
+        labels: { severity: critical, owner: platform-oncall }
+        annotations: { summary: "API 5xx error rate is elevated", runbook: "docs/incident-response.md" }
+      - alert: ApiHighLatency
+        expr: histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le)) > 1
+        for: 10m
+        labels: { severity: warning, owner: platform-oncall }
+        annotations: { summary: "API P95 latency is elevated", runbook: "docs/monitoring.md" }
+      - alert: QueueBacklog
+        expr: wallet_queue_backlog > 100
+        for: 10m
+        labels: { severity: warning, owner: operations }
+        annotations: { summary: "Queue backlog is growing", runbook: "docs/incident-response.md" }
+      - alert: ReconciliationExceptions
+        expr: wallet_reconciliation_exceptions > 0
+        for: 5m
+        labels: { severity: critical, owner: finance-operations }
+        annotations: { summary: "Financial reconciliation exceptions require review", runbook: "docs/disaster-recovery.md" }
+      - alert: BackupStale
+        expr: time() - wallet_last_successful_backup_timestamp > 86400
+        for: 30m
+        labels: { severity: critical, owner: database-operations }
+        annotations: { summary: "Backup freshness exceeded one day", runbook: "docs/backup.md" }

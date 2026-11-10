@@ -1,0 +1,93 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args: { APP_ENV: local }
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: digital_wallet
+      DB_USERNAME: wallet_app
+      DB_PASSWORD: wallet_local_only
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      FINANCIAL_EXECUTION_ENABLED: "false"
+      PAYMENT_SANDBOX_WEBHOOK_SECRET: local-sandbox-secret
+    ports: ["8000:8000"]
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "php -r '$h=@get_headers(\"http://127.0.0.1:8000/up\"); exit($h && str_contains($h[0], \"200\") ? 0 : 1);'"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+  frontend:
+    build: { context: ., dockerfile: frontend/Dockerfile }
+    ports: ["5173:80"]
+    depends_on: { api: { condition: service_healthy } }
+  queue:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: digital_wallet
+      DB_USERNAME: wallet_app
+      DB_PASSWORD: wallet_local_only
+      QUEUE_CONNECTION: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      FINANCIAL_EXECUTION_ENABLED: "false"
+    command: ["php", "artisan", "queue:work", "redis", "--sleep=1", "--tries=3", "--timeout=90"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+  scheduler:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: digital_wallet
+      DB_USERNAME: wallet_app
+      DB_PASSWORD: wallet_local_only
+      CACHE_STORE: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      FINANCIAL_EXECUTION_ENABLED: "false"
+    command: ["sh", "-c", "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+  postgres:
+    image: postgres:16.6-alpine
+    environment:
+      POSTGRES_DB: digital_wallet
+      POSTGRES_USER: wallet_app
+      POSTGRES_PASSWORD: wallet_local_only
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U wallet_app -d digital_wallet"], interval: 10s, timeout: 5s, retries: 5 }
+  redis:
+    image: redis:7.4.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis_data:/data"]
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 10s, timeout: 5s, retries: 5 }
+  mock-provider:
+    image: nginx:1.27.4-alpine
+    volumes: ["./infra/mock-provider/default.conf:/etc/nginx/conf.d/default.conf:ro"]
+    expose: ["80"]
+volumes:
+  postgres_data:
+  redis_data:

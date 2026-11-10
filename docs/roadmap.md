@@ -31,3 +31,7 @@ Phase 11 should add production-provider governance, jurisdiction-specific policy
 ## Phase 12 completed foundation
 
 Read-only multi-currency financial reporting, merchant analytics, report runs, private CSV export metadata, and period/snapshot foundations are implemented. Remaining production work includes PostgreSQL performance validation, queued large exports, XLSX/PDF libraries, scheduled reports, approved valuation sources, and period-close governance.
+
+## Phase 13 infrastructure foundation
+
+Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, and deployment-safety foundations are documented and templated. Provider-specific infrastructure, restore evidence, actual telemetry, and production approvals remain outstanding.

@@ -1,0 +1,4 @@
+environment = "development"
+cloud_provider = "unset"
+region = "unset"
+financial_execution_enabled = false

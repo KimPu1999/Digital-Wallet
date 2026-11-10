@@ -130,3 +130,7 @@ Phase 11 adds in-app notifications, preferences, mock-safe external channels, cu
 ## Phase 12 reporting
 
 Phase 12 adds read-only financial and merchant reporting over the immutable posted ledger. Trial balance, general ledger, profit/loss, balance sheet, wallet, transfer, FX, payment, settlement, reconciliation, and merchant analytics preserve currency separation and integer minor units. Reports and CSV exports are sandbox-only, private, permission-protected, checksum-tracked, and cannot modify balances.
+
+## Phase 13 infrastructure
+
+Phase 13 adds provider-neutral Docker Compose development infrastructure, production-oriented container files, Redis queue/cache configuration, correlation IDs, scheduler locking, CI workflows, Terraform module contracts, Prometheus/OpenTelemetry examples, backup/restore runbooks, and manual staging/production artifact workflows. Docker, Terraform, PostgreSQL, cloud credentials, and provider-specific deployment targets must be installed/configured before those checks can run. No Terraform apply or production deployment is performed by this repository.

@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->appendToGroup('api', [App\Http\Middleware\RequestCorrelationId::class]);
         $middleware->alias(['role' => App\Http\Middleware\RoleMiddleware::class, 'platform.admin' => App\Http\Middleware\PlatformAdminMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

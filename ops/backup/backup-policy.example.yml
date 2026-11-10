@@ -1,0 +1,12 @@
+database:
+  full_backup: daily
+  wal_archiving: required_for_pitr
+  encryption: cloud_kms_or_hsm
+  retention: define_per_jurisdiction_and_risk_policy
+  offsite_copy: required
+  restore_test: monthly_in_isolated_environment
+object_storage:
+  versioning: enabled
+  retention: define_with_legal_and_compliance
+  private_only: true
+  encryption: provider_managed_or_customer_managed_key

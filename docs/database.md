@@ -29,3 +29,7 @@ Payment amounts are BIGINT minor units with explicit ISO currency codes. The exi
 ## Phase 8 merchant tables
 
 `merchant_payment_links`, `checkout_sessions`, `merchant_qr_codes`, `refund_requests`, `merchant_settlements`, `merchant_api_keys`, `merchant_webhook_endpoints`, `merchant_webhook_deliveries`, and `merchant_checkout_settings` are merchant-scoped. Public link, checkout, and QR values are stored as hashes; amounts are BIGINT minor units; settlement status defaults to `projected`. Refund requests reference a payment intent and, after approval, a compensating ledger transaction. No table is a balance source of truth.
+
+## Phase 9 platform operations tables
+
+`platform_admin_memberships`, `platform_roles`, `platform_permissions`, and `platform_role_permissions` provide the platform staff authorization graph. `admin_approval_requests` and `admin_approval_decisions` implement expiring maker-checker decisions. `admin_security_events` and `platform_audit_events` separate security/audit history from financial audit events. `risk_cases` and `risk_case_events` record investigation timelines. `platform_feature_flags`, `platform_settings`, and `platform_settings_history` keep operational configuration versioned. Financial flags are seeded disabled and no platform table stores a mutable wallet balance.

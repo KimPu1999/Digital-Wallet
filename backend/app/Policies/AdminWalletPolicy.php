@@ -9,7 +9,7 @@ final class AdminWalletPolicy
 {
     private function isWalletStaff(User $user): bool
     {
-        return $user->hasRole('platform_super_admin') || $user->hasRole('compliance_admin') || $user->hasRole('support_agent');
+        return collect(['platform_super_admin', 'compliance_admin', 'finance_operations', 'risk_analyst', 'support_agent', 'read_only_auditor'])->contains(fn ($role) => $user->hasRole($role));
     }
 
     public function viewAny(User $user): bool

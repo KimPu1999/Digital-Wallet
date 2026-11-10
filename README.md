@@ -1,6 +1,6 @@
 # Digital Wallet Platform
 
-Phase 8 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances, FX conversions, transfers, deposits, withdrawals, provider callbacks, merchant checkout, payment links, QR references, refunds, and settlement records are demo/test state. Real deposits, payouts, banking rails, card collection, merchant acceptance, and production payment processing are not enabled.
+Phase 9 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances, FX conversions, transfers, deposits, withdrawals, provider callbacks, merchant checkout, payment links, QR references, refunds, settlement records, and platform operations are demo/test state. Real deposits, payouts, banking rails, card collection, merchant acceptance, and production payment processing are not enabled.
 
 ## Requirements
 
@@ -84,7 +84,16 @@ Payment intents and provider monitoring use /api/v1/payments, /api/v1/webhooks/p
 
 Merchant operations use `/api/v1/merchants/{merchant}` for payment links, checkout sessions, QR references, refunds, projected settlements, analytics, test API keys, and webhook endpoint registration. Customer wallet checkout is the only executable merchant payment path. Hosted card collection is not enabled because provider adapters remain explicit test-mode/unsupported boundaries. Payment link and checkout tokens are opaque bearer values; QR generation is not proof of payment; refunds post compensating ledger entries; settlements remain `projected` without provider evidence. The merchant console is available at `/merchant` and related routes.
 
-## Phase 8 readiness and limitations
+## Platform admin sandbox
+
+Platform operations use `/api/v1/admin/platform/*` and the `/admin` frontend routes. Access requires an active platform-admin membership, explicit permission, and verified MFA. Sensitive restrictions, compliance decisions, settings changes, and approval decisions require a one-time step-up challenge; maker-checker requests prevent self-approval. Financial monitoring is read-only and currency-separated. Provision staff only through the controlled command:
+
+```bash
+cd backend
+php artisan admin:provision admin@example.com "Platform Admin" --role=platform_super_admin
+```
+
+## Phase 9 readiness and limitations
 
 - Provision a clean PostgreSQL database and run migrations.
 - Install Laravel/Sanctum dependencies and configure stateful domains and CORS.
@@ -97,6 +106,8 @@ Merchant operations use `/api/v1/merchants/{merchant}` for payment links, checko
 - Do not enable production environment providers until legal, regulatory, safeguarding, reconciliation, incident response, and security reviews are complete.
 - Run merchant checkout, refund, webhook, and PostgreSQL concurrency tests against a separate PostgreSQL test database.
 - Add a reviewed API-key authentication gateway, signed merchant webhook worker, provider-hosted checkout, chargeback handling, and settlement evidence before any live merchant acceptance.
+- Run platform-admin PostgreSQL authorization, approval, audit immutability, and aggregation tests against a separate PostgreSQL database.
+- Replace sandbox step-up codes with production MFA verification and enforce dual control through operational identity governance.
 
 ## Commands
 
@@ -105,4 +116,4 @@ cd backend
 php artisan test
 ```
 
-Phase 2 adds country eligibility, separate merchant/admin authentication endpoints, email/password recovery hooks, MFA enrollment, private KYC document intake, and compliance schema. Phase 3 adds multi-currency wallet metadata. Phase 4 adds the immutable ledger and holds. Phase 5 adds sandbox FX. Phase 6 adds sandbox transfers. Phase 7 adds provider ports, payment intents, signed mock webhooks, payout holds, settlement records, and reconciliation monitoring. Phase 8 adds merchant checkout resources, opaque payment links, QR references, wallet checkout, refund accounting, projected settlements, test API keys, and SSRF-protected webhook registration. Financial capabilities remain sandbox-only.
+Phase 2 adds country eligibility, separate merchant/admin authentication endpoints, email/password recovery hooks, MFA enrollment, private KYC document intake, and compliance schema. Phase 3 adds multi-currency wallet metadata. Phase 4 adds the immutable ledger and holds. Phase 5 adds sandbox FX. Phase 6 adds sandbox transfers. Phase 7 adds provider ports, payment intents, signed mock webhooks, payout holds, settlement records, and reconciliation monitoring. Phase 8 adds merchant checkout resources, opaque payment links, QR references, wallet checkout, refund accounting, projected settlements, test API keys, and SSRF-protected webhook registration. Phase 9 adds platform roles, permissions, approvals, audit operations, compliance/risk monitoring, settings history, and system health. Financial capabilities remain sandbox-only.

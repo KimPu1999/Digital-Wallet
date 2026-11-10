@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Concerns\HasUuids; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\BelongsTo; use Illuminate\Database\Eloquent\Relations\HasMany;
+class AdminApprovalRequest extends Model { use HasUuids; public $incrementing=false; protected $keyType='string'; protected $fillable=['requested_by','action','resource_type','resource_id','status','required_decisions','expires_at','reason','idempotency_key','metadata']; protected $casts=['required_decisions'=>'integer','expires_at'=>'datetime','metadata'=>'array']; public function requester(): BelongsTo { return $this->belongsTo(User::class,'requested_by'); } public function decisions(): HasMany { return $this->hasMany(AdminApprovalDecision::class,'approval_request_id'); } }

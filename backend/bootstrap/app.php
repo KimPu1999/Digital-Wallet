@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
-        $middleware->alias(['role' => App\Http\Middleware\RoleMiddleware::class]);
+        $middleware->alias(['role' => App\Http\Middleware\RoleMiddleware::class, 'platform.admin' => App\Http\Middleware\PlatformAdminMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // API exception formatting can be extended here as the platform grows.

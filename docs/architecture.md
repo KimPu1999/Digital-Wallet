@@ -38,3 +38,7 @@ The provider port is adapter-based: registry, capability/routing, adapter attemp
 Merchant checkout resources sit above payment intents and the ledger. Payment links and QR records expose only opaque public tokens; hashes are stored server-side. Checkout sessions expire and become paid only after a verified wallet checkout posts a balanced journal. Refunds are new compensating journals and cannot edit the original payment. Settlement reporting is an internal projection and remains `projected` until matching provider evidence exists.
 
 Hosted checkout, API keys, and merchant webhooks are integration boundaries, not proof of payment. Provider-hosted card collection is disabled in the sandbox. API keys are hashed, scoped, revocable, and merchant-isolated. Webhook URLs pass SSRF checks and signing secrets are encrypted; delivery is represented by queued records until a reviewed worker is enabled.
+
+## Phase 9 platform operations boundary
+
+Platform administration is separated from customer and merchant tenancy. A platform membership maps a staff user to a platform role and permissions. The admin middleware checks the membership, active account, and verified MFA; sensitive service methods additionally consume a one-time step-up challenge. Approvals, security events, platform audit events, risk cases, feature flags, and versioned settings have separate records and are not mixed into wallet balances or merchant data.

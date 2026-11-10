@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\PlatformAdminSeeder;
 
 Artisan::command('inspire', function (): void {
     $this->comment(Inspiring::quote());
@@ -29,11 +30,14 @@ Artisan::command('test {--filter=}', function (): int {
 
 Artisan::command('admin:provision {email} {name} {--role=platform_super_admin}', function (): int {
     $roleName = (string) $this->option('role');
-    if (!in_array($roleName, ['platform_super_admin', 'compliance_admin', 'support_agent'], true)) { $this->error('Unsupported staff role.'); return 1; }
+    if (!in_array($roleName, ['platform_super_admin', 'compliance_admin', 'finance_operations', 'risk_analyst', 'support_agent', 'read_only_auditor'], true)) { $this->error('Unsupported staff role.'); return 1; }
+    app(PlatformAdminSeeder::class)->run();
     $temporaryPassword = Str::random(32);
     $user = User::updateOrCreate(['email' => $this->argument('email')], ['name' => $this->argument('name'), 'password' => Hash::make($temporaryPassword), 'account_status' => 'active', 'user_type' => 'staff', 'is_active' => true]);
     $role = Role::firstOrCreate(['name' => $roleName], ['guard_name' => 'web']);
     DB::table('role_assignments')->updateOrInsert(['user_id'=>$user->id,'role_id'=>$role->id],['id'=>(string) Str::uuid(),'created_at'=>now(),'updated_at'=>now()]);
+    $platformRoleId = DB::table('platform_roles')->where('name', $roleName)->value('id');
+    DB::table('platform_admin_memberships')->updateOrInsert(['user_id' => $user->id, 'platform_role_id' => $platformRoleId], ['id' => (string) Str::uuid(), 'status' => 'active', 'created_at' => now(), 'updated_at' => now()]);
     $this->info('Staff account provisioned. Deliver the one-time password through an approved secure channel:');
     $this->line($temporaryPassword);
     return 0;

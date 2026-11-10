@@ -10,5 +10,6 @@ class DatabaseSeeder extends Seeder {
         $this->call(FxSeeder::class);
         $this->call(TransferSeeder::class);
         $this->call(PaymentSeeder::class);
+        $this->call(PlatformAdminSeeder::class);
     }
 }

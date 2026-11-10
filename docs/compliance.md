@@ -1,7 +1,5 @@
-# Transfer compliance integration points
+# Compliance center
 
-The transfer workflow creates five sandbox screening records for sanctions, PEP, beneficiary risk, country risk, and velocity. MockTransferScreeningService returns a clearly labeled development result and never represents a real compliance decision.
+KYC and KYB review is a manual, auditable workflow. Review queues expose case state and safe document metadata; they do not expose storage secrets or full identity documents. A reviewer decision records actor, reason, timestamp, and previous/new status. Mock screening success never auto-approves a case.
 
-Production integration must add sanctions and PEP vendor adapters, versioned country/corridor policy, KYC/KYB tier resolution, velocity monitoring, manual review with dual approval, suspicious activity escalation, provider callback authentication, and retention controls.
-
-Country capabilities and seeded transfer limits are feature configuration only. They do not assert regulatory approval or legal limits.
+Production readiness requires jurisdiction-specific KYC/AML policy, sanctions and PEP screening, beneficial ownership verification, document access controls, retention/deletion rules, escalation, case QA, and regulatory approval.

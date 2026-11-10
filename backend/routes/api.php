@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\AdminTransferController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\AdminPaymentController;
 use App\Http\Controllers\Api\V1\MerchantCheckoutController;
+use App\Http\Controllers\Api\V1\PlatformAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -80,6 +81,29 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/auth/mfa/recovery', [AuthController::class, 'mfaRecovery']);
         Route::get('/kyc', [KycController::class, 'show']);
         Route::post('/kyc/documents', [KycController::class, 'submit']);
+        Route::prefix('admin/platform')->group(function (): void {
+            Route::get('/overview', [PlatformAdminController::class, 'overview'])->middleware('platform.admin:dashboard.read');
+            Route::get('/users', [PlatformAdminController::class, 'users'])->middleware('platform.admin:users.read');
+            Route::get('/users/{user}', [PlatformAdminController::class, 'user'])->middleware('platform.admin:users.read');
+            Route::post('/users/{user}/restriction', [PlatformAdminController::class, 'restrictUser'])->middleware('platform.admin:users.restrict');
+            Route::get('/merchants', [PlatformAdminController::class, 'merchants'])->middleware('platform.admin:merchants.read');
+            Route::get('/merchants/{merchant}', [PlatformAdminController::class, 'merchant'])->middleware('platform.admin:merchants.read');
+            Route::get('/compliance', [PlatformAdminController::class, 'compliance'])->middleware('platform.admin:compliance.read');
+            Route::get('/compliance/{case}', [PlatformAdminController::class, 'complianceCase'])->middleware('platform.admin:compliance.read');
+            Route::post('/compliance/{case}/decision', [PlatformAdminController::class, 'complianceDecision'])->middleware('platform.admin:compliance.decide');
+            Route::get('/financial/summary', [PlatformAdminController::class, 'financial'])->middleware('platform.admin:financial.read');
+            Route::get('/risk/cases', [PlatformAdminController::class, 'riskCases'])->middleware('platform.admin:risk.read');
+            Route::post('/risk/cases', [PlatformAdminController::class, 'createRiskCase'])->middleware('platform.admin:risk.manage');
+            Route::get('/approvals', [PlatformAdminController::class, 'approvals'])->middleware('platform.admin:approvals.request');
+            Route::post('/approvals', [PlatformAdminController::class, 'createApproval'])->middleware('platform.admin:approvals.request');
+            Route::post('/approvals/{approval}/decision', [PlatformAdminController::class, 'decideApproval'])->middleware('platform.admin:approvals.decide');
+            Route::get('/audit', [PlatformAdminController::class, 'audit'])->middleware('platform.admin:audit.read');
+            Route::get('/settings', [PlatformAdminController::class, 'settings'])->middleware('platform.admin:settings.read');
+            Route::put('/settings/{key}', [PlatformAdminController::class, 'updateSetting'])->middleware('platform.admin:settings.manage');
+            Route::put('/feature-flags/{flag}', [PlatformAdminController::class, 'updateFeatureFlag'])->middleware('platform.admin:settings.manage');
+            Route::get('/health', [PlatformAdminController::class, 'health'])->middleware('platform.admin:system.health');
+            Route::post('/step-up', [PlatformAdminController::class, 'stepUp'])->middleware('platform.admin:system.health');
+        });
         Route::post('/checkout/{token}/wallet-pay', [MerchantCheckoutController::class, 'walletPay'])->middleware('throttle:transfers');
         Route::post('/qr/{token}/wallet-pay', [MerchantCheckoutController::class, 'qrWalletPay'])->middleware('throttle:transfers');
         Route::prefix('merchants/{merchant}')->group(function (): void {
@@ -101,7 +125,7 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/webhook-endpoints', [MerchantCheckoutController::class, 'webhookEndpoints']);
             Route::post('/webhook-endpoints', [MerchantCheckoutController::class, 'createWebhookEndpoint'])->middleware('throttle:transfers');
         });
-        Route::middleware('role:platform_super_admin,compliance_admin,support_agent')->prefix('admin')->group(function (): void {
+        Route::middleware('role:platform_super_admin,compliance_admin,finance_operations,risk_analyst,support_agent,read_only_auditor')->prefix('admin')->group(function (): void {
             Route::get('/wallets', [AdminWalletController::class, 'index']);
             Route::get('/wallets/{wallet}', [AdminWalletController::class, 'show']);
             Route::get('/ledger/accounts', [AdminLedgerController::class, 'accounts']);

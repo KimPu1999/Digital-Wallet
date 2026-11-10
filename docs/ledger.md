@@ -36,3 +36,7 @@ Sandbox internal transfers use the existing wallet-hold capture path and immutab
 ## Merchant checkout and refunds
 
 Wallet checkout debits the customer wallet liability and credits the merchant wallet liability in the same currency. The payment intent and checkout session are updated only after the balanced journal posts. A refund credits the customer liability and debits the merchant liability through a new compensating journal linked to the refund request; the original posted entries remain immutable. Merchant settlement reports are derived summaries and are not ledger postings without matching settlement evidence.
+
+## Platform operations
+
+Platform financial views read immutable ledger, FX, transfer, payment, refund, and settlement records. Aggregation is grouped by currency and date range. Admin approvals and audit references can authorize a future compensating command, but they never mutate a posted journal or bypass ledger validation.

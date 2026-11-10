@@ -27,3 +27,7 @@ Provider credentials are encrypted/server-side only. Raw PAN/CVV and bank creden
 ## Phase 8 controls
 
 Merchant links, checkout sessions, and QR references use opaque bearer tokens whose hashes are stored at rest. Wallet checkout requires customer ownership, email verification, step-up MFA, scoped idempotency, deterministic ledger locks, and a successful balanced journal. Refunds require merchant authorization and compensate the original ledger transaction. Merchant API keys are SHA-256 hashed, scoped, expirable, revocable, and shown once. Webhook endpoints require public HTTPS and reject private/internal destinations to reduce SSRF risk; signing secrets are encrypted. These are sandbox controls and still require independent review before production.
+
+## Phase 9 controls
+
+Platform access uses separate memberships and fine-grained permissions for super admin, compliance, finance, risk, support, and read-only audit roles. Verified MFA is required for all platform API reads; sensitive restrictions, compliance decisions, settings changes, and approval decisions require a one-time step-up challenge. Maker-checker prevents self-approval and supports dual approval. Admin APIs return safe identity metadata and document metadata only, never passwords, MFA secrets, provider credentials, raw API keys, signing secrets, or full identity documents.

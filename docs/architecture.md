@@ -26,3 +26,9 @@ FX is a bounded domain above the Phase 4 ledger. Provider adapters create rate s
 ## Phase 6 transfer boundary
 
 Transfers are a separate command domain above wallets, holds, ledger, FX, compliance, and provider ports. Beneficiary details are encrypted; quotes are server-authoritative; the transfer state machine is explicit; limit usage and step-up challenges are persisted; mock screening/provider adapters are deterministic and sandbox-labeled. Only the transfer service can reserve, capture, or release holds and invoke the internal ledger posting boundary.
+
+## Phase 7 payment boundary
+
+Payments are a separate orchestration domain above the existing wallet, ledger, hold, compliance, and audit boundaries. A payment intent is not a ledger transaction. A provider attempt is not settlement. Only PaymentSettlementService can bridge a verified provider transaction to the internal ledger, and it uses the existing idempotent LedgerPostingService or WalletHoldService.
+
+The provider port is adapter-based: registry, capability/routing, adapter attempt, verified webhook, provider transaction, then settlement/reconciliation. Production provider adapters are disabled by configuration and no customer route accepts arbitrary provider or ledger identifiers. Merchant payment intents are scoped by merchant memberships and remain non-live.

@@ -18,3 +18,8 @@ FX quote and conversion routes require Sanctum authentication, wallet policy own
 Phase 6 adds beneficiary ownership checks, encrypted account details, transfer quote expiry, database-backed limit locks, one-time step-up challenge consumption, mock screening records, provider-attempt records, and hold/ledger atomicity. The development-only step-up code and mock screening result must be replaced before production.
 
 Production work must add provider credential isolation, stale-rate policy, circuit breakers, market-data monitoring, rate manipulation controls, approval workflows, and PostgreSQL concurrency tests before enabling any external provider.
+## Phase 7 controls
+
+Payment operations require authenticated ownership, email verification, country eligibility, configured KYC gates, server-side provider routing, scoped idempotency keys, and rate limiting. Withdrawals additionally require step-up MFA and an atomic wallet hold. Provider webhooks verify signatures and replay windows before event deduplication and settlement. Customer, merchant, and platform-admin reads remain isolated by policy and role middleware.
+
+Provider credentials are encrypted/server-side only. Raw PAN/CVV and bank credentials are not accepted. Production requires hosted/tokenized collection, MFA enforcement, fraud/AML monitoring, provider allowlists, secrets rotation, restricted database roles, backup/restore tests, incident response, and regulatory approval appropriate to the operating model.

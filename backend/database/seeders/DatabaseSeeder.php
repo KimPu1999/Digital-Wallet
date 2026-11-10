@@ -9,5 +9,6 @@ class DatabaseSeeder extends Seeder {
         foreach(['platform_super_admin','compliance_admin','support_agent','merchant_owner','merchant_manager','customer'] as $role) DB::table('roles')->updateOrInsert(['name'=>$role],['id'=>(string) Str::uuid(),'guard_name'=>'web','created_at'=>now(),'updated_at'=>now()]);
         $this->call(FxSeeder::class);
         $this->call(TransferSeeder::class);
+        $this->call(PaymentSeeder::class);
     }
 }

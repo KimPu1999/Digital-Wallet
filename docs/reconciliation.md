@@ -27,3 +27,6 @@ Production operations still need scheduled execution, alerting, retention, indep
 # Phase 6 transfer reconciliation
 
 Transfer reconciliation must compare every transfer's hold state, transfer event state, provider attempt state, and linked ledger transaction. A completed transfer is valid only when the source hold is captured exactly once and the linked journal is posted and balanced. Failed, timed-out, cancelled, and returned transfers must have released holds and released limit usage. Differences are exceptions for review; the system must never silently edit a balance or mark an external provider as settled.
+## Phase 7 payment reconciliation
+
+Payment reconciliation compares provider event amount/currency/reference, payment intent, provider transaction, settlement item, and ledger transaction. Missing events, duplicate events, unknown provider outcomes, amount/currency mismatches, settlement delays, and unmatched batches become explicit open exceptions. The system does not auto-correct financial differences; a future corrective posting must be an authorized, separately audited workflow.

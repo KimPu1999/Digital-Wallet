@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\V1\AdminFxController;
 use App\Http\Controllers\Api\V1\BeneficiaryController;
 use App\Http\Controllers\Api\V1\TransferController;
 use App\Http\Controllers\Api\V1\AdminTransferController;
+use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\AdminPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -23,6 +25,7 @@ Route::prefix('v1')->group(function (): void {
     Route::post('/auth/merchant/register', [AuthController::class, 'merchantRegister'])->middleware('throttle:auth');
     Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:auth');
     Route::post('/auth/admin/login', [AuthController::class, 'adminLogin'])->middleware('throttle:auth');
+    Route::post('/webhooks/payments/{provider}', [PaymentController::class, 'webhook'])->middleware('throttle:auth');
     Route::post('/auth/password/forgot', [PasswordController::class, 'forgot'])->middleware('throttle:auth');
     Route::post('/auth/password/reset', [PasswordController::class, 'reset'])->middleware('throttle:auth');
     Route::middleware('auth:sanctum')->group(function (): void {
@@ -62,6 +65,12 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/transfers/{transfer}/cancel', [TransferController::class, 'cancel']);
         Route::get('/transfers/{transfer}', [TransferController::class, 'show']);
         Route::get('/profile', [ProfileController::class, 'show']);
+        Route::get('/payment-methods', [PaymentController::class, 'methods']);
+        Route::post('/payments/deposits/intent', [PaymentController::class, 'deposit'])->middleware('throttle:transfers');
+        Route::post('/payments/withdrawals/intent', [PaymentController::class, 'withdrawal'])->middleware('throttle:transfers');
+        Route::get('/payments', [PaymentController::class, 'index']);
+        Route::get('/payments/{payment}/timeline', [PaymentController::class, 'timeline']);
+        Route::get('/payments/{payment}', [PaymentController::class, 'show']);
         Route::get('/auth/mfa', [AuthController::class, 'mfaStatus']);
         Route::post('/auth/mfa/enroll', [AuthController::class, 'mfaEnroll']);
         Route::post('/auth/mfa/verify', [AuthController::class, 'mfaVerify']);
@@ -86,6 +95,12 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/transfers/risk-alerts', [AdminTransferController::class, 'riskAlerts']);
             Route::get('/transfers', [AdminTransferController::class, 'index']);
             Route::get('/transfers/{transfer}', [AdminTransferController::class, 'show']);
+            Route::get('/payments', [AdminPaymentController::class, 'index']);
+            Route::get('/payments/{payment}', [AdminPaymentController::class, 'show']);
+            Route::get('/payment-providers', [AdminPaymentController::class, 'providers']);
+            Route::get('/payment-webhooks', [AdminPaymentController::class, 'webhooks']);
+            Route::get('/settlement-batches', [AdminPaymentController::class, 'settlements']);
+            Route::get('/payment-reconciliation', [AdminPaymentController::class, 'reconciliation']);
         });
     });
 });

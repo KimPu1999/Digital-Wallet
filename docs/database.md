@@ -20,3 +20,8 @@ fx_rate_providers, fx_pairs, fx_rate_snapshots, and fx_fee_rules hold provider c
 Rates use DECIMAL(36,18). Monetary values use BIGINT minor units. There is no FX balance column and no floating-point monetary calculation.
 
 Phase 6 adds beneficiaries and beneficiary_accounts, transfer_quotes, transfers, transfer_events, transfer_screenings, transfer_attempts, transfer_limits, transfer_limit_usages, transfer_receipts, and transfer_step_up_challenges. Encrypted beneficiary details are stored as ciphertext; only a masked suffix is presentation metadata. Transfer amounts are BIGINT minor units and external recipient amounts are not wallet balances.
+## Phase 7 payment tables
+
+payment_providers, provider_accounts, provider_capabilities, provider_routing_rules, and provider_health_events describe provider configuration without plaintext credentials. payment_intents, payment_attempts, and provider_transactions record lifecycle and external observations. payment_webhook_events stores encrypted raw bodies and processing state. settlement_batches and settlement_items match provider settlement to ledger references. payment_reconciliation_items stores exceptions and never silently changes balances.
+
+Payment amounts are BIGINT minor units with explicit ISO currency codes. The existing ledger remains the financial source of truth; no payment table contains a mutable customer balance.

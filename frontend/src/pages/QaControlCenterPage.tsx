@@ -11,6 +11,11 @@ type QaOverview = {
   performance_runs: Array<{ target: string; status: string; p95_ms?: string | number }>;
   recovery_drills: Array<{ environment: string; status: string; ledger_reconciled?: boolean }>;
   release_gates: Gate[];
+  module_coverage: Array<{ module_key: string; phase: number; name: string; coverage_status: string; evidence_reference?: string | null }>;
+  feature_inventory: Array<{ flag_key: string; enabled: boolean; environment: string; category?: string; rollout_percentage?: number }>;
+  maintenance_backlog: Array<{ item_key: string; category: string; priority: string; status: string; title: string; evidence_reference?: string | null }>;
+  financial_integrity: { status: string; posted_transactions: number; imbalances: Array<{ currency_code: string; difference_minor: number }>; reconciliation_exceptions: number; reason: string };
+  infrastructure: { status: string; checks: Record<string, boolean>; reason: string };
 };
 
 const labels: Record<string, string> = {
@@ -53,6 +58,15 @@ export function QaControlCenterPage() {
       <section className="side-card admin-directory qa-section"><div className="side-card-head"><div><h2>Latest evidence</h2><p>Only results persisted by QA workflows are shown.</p></div><ClipboardCheck size={20}/></div>
         {data.test_runs.latest.length ? data.test_runs.latest.map((run) => <div className="admin-row" key={`${run.category}-${run.suite}`}><span><strong>{run.suite}</strong><small>{run.category}</small></span><span className={`status-chip ${run.status}`}>{statusIcon(run.status)} {run.status}</span></div>) : <div className="admin-empty">No test-run artifacts have been recorded.</div>}
       </section>
+      <div className="platform-columns">
+        <section className="side-card qa-section"><div className="side-card-head"><div><h2>Module coverage</h2><p>Only imported audit inventory is counted.</p></div><ClipboardCheck size={20}/></div>{data.module_coverage.length ? data.module_coverage.slice(0, 10).map((module) => <div className="admin-row" key={module.module_key}><span><strong>Phase {module.phase} · {module.name}</strong><small>{module.module_key} · {module.evidence_reference ?? 'Evidence required'}</small></span><span className={`status-chip ${module.coverage_status}`}>{module.coverage_status}</span></div>) : <div className="admin-empty">No module inventory evidence has been imported.</div>}</section>
+        <section className="side-card qa-section"><div className="side-card-head"><div><h2>Feature inventory</h2><p>Backend feature flags are not client-side authorization.</p></div><LockKeyhole size={20}/></div>{data.feature_inventory.length ? data.feature_inventory.slice(0, 10).map((flag) => <div className="admin-row" key={flag.flag_key}><span><strong>{flag.flag_key}</strong><small>{flag.category ?? 'product'} · {flag.environment} · {flag.rollout_percentage ?? 0}%</small></span><span className={`status-chip ${flag.enabled ? 'conditional' : 'blocked'}`}>{flag.enabled ? 'enabled' : 'disabled'}</span></div>) : <div className="admin-empty">No feature flags are configured.</div>}</section>
+      </div>
+      <div className="platform-columns">
+        <section className="side-card qa-section"><div className="side-card-head"><div><h2>Financial integrity</h2><p>Posted ledger evidence, currency balance and reconciliation exceptions.</p></div><ShieldAlert size={20}/></div><div className="admin-row"><span><strong>{data.financial_integrity.posted_transactions} posted transaction(s)</strong><small>{data.financial_integrity.reason}</small></span><span className={`status-chip ${data.financial_integrity.status}`}>{data.financial_integrity.status}</span></div><div className="admin-row"><span><strong>Currency imbalances</strong><small>Debit and credit totals remain currency-specific.</small></span><strong>{data.financial_integrity.imbalances.length}</strong></div><div className="admin-row"><span><strong>Reconciliation exceptions</strong><small>No automatic corrections are performed.</small></span><strong>{data.financial_integrity.reconciliation_exceptions}</strong></div></section>
+        <section className="side-card qa-section"><div className="side-card-head"><div><h2>Infrastructure readiness</h2><p>{data.infrastructure.reason}</p></div><DatabaseBackup size={20}/></div>{Object.entries(data.infrastructure.checks).map(([key, value]) => <div className="admin-row" key={key}><span><strong>{key.replaceAll('_', ' ')}</strong><small>Repository configuration evidence</small></span><span className={`status-chip ${value ? 'ready' : 'blocked'}`}>{value ? 'present' : 'missing'}</span></div>)}</section>
+      </div>
+      <section className="side-card admin-directory qa-section"><div className="side-card-head"><div><h2>Maintenance backlog</h2><p>Dependency, security, database, recovery and documentation work requires explicit evidence.</p></div><Clock3 size={20}/></div>{data.maintenance_backlog.length ? data.maintenance_backlog.slice(0, 10).map((item) => <div className="admin-row" key={item.item_key}><span><strong>{item.title}</strong><small>{item.category} · {item.item_key} · {item.evidence_reference ?? 'No evidence'}</small></span><span className={`status-chip ${item.priority === 'critical' || item.priority === 'high' ? 'blocked' : 'conditional'}`}>{item.priority} · {item.status}</span></div>) : <div className="admin-empty">No maintenance items have been recorded.</div>}</section>
     </>}
   </main></AppShell>;
 }

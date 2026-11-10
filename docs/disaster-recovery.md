@@ -15,3 +15,7 @@ Revoke affected credentials, stop access, preserve audit evidence, rotate throug
 ## Failed deployment or corruption
 
 Stop rollout, route to the last verified immutable artifact, do not automatically reverse irreversible migrations, restore data only in an approved isolated process, and run ledger/reconciliation validation before service recovery.
+
+## Phase 20 evidence requirement
+
+Recovery drills are evidence records, not promises. A valid drill must restore into an isolated environment, validate schema and ledger balances, check idempotency and provider references, record recovery point and duration, and reconcile before any sandbox service resumes. No RPO/RTO target is considered met without measured restore evidence.

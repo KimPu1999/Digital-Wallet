@@ -73,3 +73,11 @@ Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, 
 - Monitor sandbox activity, provider telemetry, queues, webhooks, reconciliation and exceptions.
 - Require independent approvals for evaluation decisions and auditable pilot closure.
 - Keep live financial execution disabled; a pilot decision is not legal, partner or production authorization.
+
+# Phase 20 — Final audit and long-term maintenance
+
+- Keep the quality center evidence-backed for module coverage, financial integrity, infrastructure and release gates.
+- Complete PostgreSQL-specific financial, authorization, backup/restore and concurrency validation.
+- Populate maintenance ownership, due dates and evidence references.
+- Complete Flutter, browser accessibility, dependency, container and controlled performance checks where tooling is available.
+- Keep software release readiness separate from regulatory authorization and live financial activation.

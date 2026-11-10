@@ -180,6 +180,11 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/qa/findings', [PlatformQaController::class, 'findings'])->middleware('platform.admin:audit.read');
             Route::get('/qa/performance', [PlatformQaController::class, 'performance'])->middleware('platform.admin:audit.read');
             Route::get('/qa/recovery', [PlatformQaController::class, 'recovery'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/module-coverage', [PlatformQaController::class, 'moduleCoverage'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/feature-inventory', [PlatformQaController::class, 'featureInventory'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/maintenance', [PlatformQaController::class, 'maintenance'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/financial-integrity', [PlatformQaController::class, 'financialIntegrity'])->middleware('platform.admin:audit.read');
+            Route::get('/qa/infrastructure', [PlatformQaController::class, 'infrastructure'])->middleware('platform.admin:system.health');
             Route::get('/qa/release-readiness', [PlatformQaController::class, 'releaseReadiness'])->middleware('platform.admin:dashboard.read');
             Route::get('/mobile/overview', [PlatformMobileQaController::class, 'overview'])->middleware('platform.admin:dashboard.read');
             Route::get('/mobile/builds', [PlatformMobileQaController::class, 'builds'])->middleware('platform.admin:audit.read');

@@ -154,3 +154,9 @@ Useful routes include `/api/v1/platform/regulatory/overview`, `/api/v1/platform/
 Phase 19 adds sandbox-only pilot programs, scoped cohorts and participants, backend eligibility checks, currency-aware pilot limits, activity and provider monitoring, reconciliation reviews, exceptions, evaluations, independent decision approvals and auditable closure requests.
 
 Pilot operations cannot post ledger entries, activate production providers or enable live money movement. Missing telemetry is not treated as healthy, and currency totals are never combined implicitly.
+
+## Phase 20 final audit and maintenance
+
+Phase 20 extends the existing QA control center with evidence-backed module coverage, feature inventory, maintenance backlog, financial-integrity checks, infrastructure readiness and release-gate reporting. Missing evidence remains blocked or conditional; no metric is fabricated and no dashboard action enables live financial execution.
+
+See `docs/final-audit.md`, `docs/financial-integrity.md`, `docs/release-readiness.md`, and `docs/maintenance-plan.md` for the audit scope and operating cadence.

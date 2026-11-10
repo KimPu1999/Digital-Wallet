@@ -15,3 +15,6 @@ The ledger remains the financial source of truth. Balances are derived from immu
 
 The repository’s existing ledger feature tests passed in the local SQLite harness. PostgreSQL locking, deadlock, isolation and restore validation were not executed because PostgreSQL was not running locally. SQLite evidence is not a substitute for those checks.
 
+## Phase 20 quality-center rule
+
+The quality center reads only posted ledger transactions and groups debit/credit totals by currency. Any currency imbalance or reconciliation exception blocks the financial-integrity gate.

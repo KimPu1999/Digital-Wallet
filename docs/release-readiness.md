@@ -15,3 +15,6 @@ Gate statuses are `ready`, `conditional` or `blocked`. Missing evidence is `bloc
 
 The baseline Laravel suite and frontend typecheck/build have evidence. PostgreSQL integration, browser E2E, load testing, container builds/scans and restore validation were not executable locally. Therefore the overall Phase 14 status is **blocked**, not production-ready.
 
+## Phase 20 policy
+
+Software readiness does not imply regulatory authorization, licensing, provider approval, banking partnership, safeguarding approval or permission to enable live money movement.

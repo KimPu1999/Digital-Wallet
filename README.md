@@ -138,3 +138,7 @@ Phase 13 adds provider-neutral Docker Compose development infrastructure, produc
 ## Phase 15 mobile foundation
 
 The `mobile/` directory contains a Flutter customer-client foundation using Riverpod, GoRouter, Dio, Sanctum session cookies, secure-storage abstractions, local authentication, and English/Myanmar themes. Flutter/Dart tooling must be installed before mobile dependencies, tests, Android builds, or iOS builds can be verified. Mobile financial operations remain sandbox-only.
+
+## Phase 17 enterprise operations
+
+Phase 17 adds evidence-backed enterprise operations, governance records, deterministic feature rollout metadata, privacy-request tracking, incident records, release candidates, and privacy-conscious product analytics. Sensitive changes use existing maker-checker approval and step-up controls. No live financial capability or production deployment is enabled.

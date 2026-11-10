@@ -48,3 +48,10 @@ Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, 
 - Implement and test transfer, FX, QR, notifications, support, KYC and security journeys.
 - Import CI builds, mobile test runs, crash reports and beta feedback into the mobile operations dashboard.
 - Keep Android/iOS release gates blocked until actual device, security, accessibility and beta approval evidence exists.
+
+# Phase 17 — Enterprise maturity
+
+- Complete PostgreSQL-backed governance, privacy, lifecycle and incident integration tests.
+- Populate enterprise operations from authorized production-like telemetry only.
+- Complete policy ownership, access reviews, release approvals and retention review.
+- Keep financial feature activation and production deployment behind independent approvals.

@@ -8,6 +8,7 @@ return [
     'timezone' => 'UTC',
     'locale' => env('APP_LOCALE', 'en'),
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+    'financial_execution_enabled' => (bool) env('FINANCIAL_EXECUTION_ENABLED', false),
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
     'key' => env('APP_KEY'),

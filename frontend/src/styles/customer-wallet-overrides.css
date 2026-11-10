@@ -1,0 +1,3 @@
+.wallet-selector-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.wallet-selector-group .wallet-select-wrap{min-width:0}
+@media (max-width:760px){.wallet-selector-group{max-width:155px}.wallet-selector-group .wallet-select-wrap{width:100%;justify-content:flex-start}.wallet-selector-group .wallet-select-wrap select{max-width:105px}}

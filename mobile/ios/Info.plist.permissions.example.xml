@@ -1,0 +1,7 @@
+<!-- Merge these keys into the generated ios/Runner/Info.plist. -->
+<dict>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera access is used only to scan sandbox payment QR references.</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Face ID helps unlock your secure wallet session.</string>
+</dict>

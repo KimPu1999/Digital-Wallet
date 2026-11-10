@@ -134,3 +134,7 @@ Phase 12 adds read-only financial and merchant reporting over the immutable post
 ## Phase 13 infrastructure
 
 Phase 13 adds provider-neutral Docker Compose development infrastructure, production-oriented container files, Redis queue/cache configuration, correlation IDs, scheduler locking, CI workflows, Terraform module contracts, Prometheus/OpenTelemetry examples, backup/restore runbooks, and manual staging/production artifact workflows. Docker, Terraform, PostgreSQL, cloud credentials, and provider-specific deployment targets must be installed/configured before those checks can run. No Terraform apply or production deployment is performed by this repository.
+
+## Phase 15 mobile foundation
+
+The `mobile/` directory contains a Flutter customer-client foundation using Riverpod, GoRouter, Dio, Sanctum session cookies, secure-storage abstractions, local authentication, and English/Myanmar themes. Flutter/Dart tooling must be installed before mobile dependencies, tests, Android builds, or iOS builds can be verified. Mobile financial operations remain sandbox-only.

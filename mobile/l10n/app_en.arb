@@ -1,0 +1,9 @@
+{
+  "@@locale": "en",
+  "appName": "Digital Wallet",
+  "signIn": "Sign in",
+  "email": "Email",
+  "password": "Password",
+  "home": "Home",
+  "sandboxNotice": "Sandbox mode — no real money movement is enabled."
+}

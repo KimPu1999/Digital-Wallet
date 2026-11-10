@@ -1,0 +1,14 @@
+.dart_tool/
+.packages
+.pub-cache/
+build/
+ios/Pods/
+ios/.symlinks/
+android/.gradle/
+android/local.properties
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+*.cer
+*.pem

@@ -55,11 +55,11 @@ final class SecurityComplianceTest extends TestCase
 
     public function test_platform_case_access_and_valid_transition_are_authorized(): void
     {
-        $response = $this->actingAs($this->admin)->postJson('/api/v1/platform/compliance/cases', ['subject_type' => 'user', 'subject_id' => $this->customer->id, 'priority' => 'high', 'case_type' => 'aml', 'reason' => 'Sandbox analyst review']);
+        $response = $this->withSession(['platform_admin_authenticated_at' => now()->toIso8601String()])->actingAs($this->admin)->postJson('/api/v1/platform/compliance/cases', ['subject_type' => 'user', 'subject_id' => $this->customer->id, 'priority' => 'high', 'case_type' => 'aml', 'reason' => 'Sandbox analyst review']);
         $response->assertCreated()->assertJsonPath('data.status', 'open');
         $caseId = $response->json('data.id');
         $challenge = app(AdminStepUpService::class)->issue($this->admin);
-        $this->actingAs($this->admin)->postJson('/api/v1/platform/compliance/cases/'.$caseId.'/events', ['status' => 'assigned', 'notes' => 'Assigned to sandbox analyst', 'challenge_id' => $challenge['challenge_id'], 'challenge_code' => $challenge['sandbox_code']])->assertOk()->assertJsonPath('data.status', 'assigned');
+        $this->withSession(['platform_admin_authenticated_at' => now()->toIso8601String()])->actingAs($this->admin)->postJson('/api/v1/platform/compliance/cases/'.$caseId.'/events', ['status' => 'assigned', 'notes' => 'Assigned to sandbox analyst', 'challenge_id' => $challenge['challenge_id'], 'challenge_code' => $challenge['sandbox_code']])->assertOk()->assertJsonPath('data.status', 'assigned');
         $this->actingAs($this->customer)->getJson('/api/v1/platform/compliance/cases')->assertForbidden();
         $this->assertDatabaseHas('case_events', ['compliance_case_id' => $caseId, 'event_type' => 'status_changed']);
     }

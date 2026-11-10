@@ -39,7 +39,7 @@ final class PlatformAdminTest extends TestCase
     public function test_protected_overview_rejects_non_admin_and_accepts_verified_admin(): void
     {
         $this->getJson('/api/v1/admin/platform/overview')->assertUnauthorized();
-        $this->actingAs($this->complianceAdmin)->getJson('/api/v1/admin/platform/overview')->assertOk()->assertJsonPath('data.sandbox_only', true);
+        $this->withSession(['platform_admin_authenticated_at' => now()->toIso8601String()])->actingAs($this->complianceAdmin)->getJson('/api/v1/admin/platform/overview')->assertOk()->assertJsonPath('data.sandbox_only', true);
     }
 
     public function test_maker_cannot_self_approve_and_second_admin_can_complete_dual_approval(): void

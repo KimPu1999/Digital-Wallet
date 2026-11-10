@@ -5,6 +5,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpFoundation\Response;
 
 final class VerificationController
 {
@@ -14,11 +15,11 @@ final class VerificationController
         return response()->json(['message'=>'If verification is pending, instructions will be sent.']);
     }
 
-    public function verify(Request $request, string $id, string $hash): JsonResponse
+    public function verify(Request $request, string $id, string $hash): Response
     {
-        abort_unless(URL::hasValidSignature($request), 403, 'Invalid verification link.');
+        if (!URL::hasValidSignature($request)) return $this->invalidLink($request);
         $user = User::findOrFail($id);
-        abort_unless(hash_equals(sha1($user->getEmailForVerification()), $hash), 403, 'Invalid verification link.');
+        if (!hash_equals(sha1($user->getEmailForVerification()), $hash)) return $this->invalidLink($request);
 
         if (!$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
@@ -26,6 +27,13 @@ final class VerificationController
             event(new Verified($user));
         }
 
-        return response()->json(['message'=>'Email verified.']);
+        if ($request->expectsJson()) return response()->json(['message'=>'Email verified.']);
+        return redirect()->away(rtrim(config('app.frontend_url'), '/').'/admin/login?verified=1');
+    }
+
+    private function invalidLink(Request $request): Response
+    {
+        if ($request->expectsJson()) return response()->json(['message'=>'The verification link is invalid or expired.'], 403);
+        return redirect()->away(rtrim(config('app.frontend_url'), '/').'/admin/login?verification=invalid');
     }
 }

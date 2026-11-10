@@ -40,6 +40,8 @@ Route::prefix('v1')->group(function (): void {
     Route::post('/auth/merchant/register', [AuthController::class, 'merchantRegister'])->middleware('throttle:auth');
     Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:auth');
     Route::post('/auth/admin/login', [AuthController::class, 'adminLogin'])->middleware('throttle:auth');
+    Route::post('/auth/admin/mfa/verify', [AuthController::class, 'adminMfaVerify'])->middleware('throttle:auth');
+    Route::post('/auth/admin/email/resend', [AuthController::class, 'resendAdminVerification'])->middleware('throttle:auth');
     Route::post('/webhooks/payments/{provider}', [PaymentController::class, 'webhook'])->middleware('throttle:auth');
     Route::get('/checkout/{token}', [MerchantCheckoutController::class, 'publicCheckout']);
     Route::get('/qr/{token}', [MerchantCheckoutController::class, 'publicQr']);

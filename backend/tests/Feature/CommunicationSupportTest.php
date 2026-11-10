@@ -66,7 +66,7 @@ final class CommunicationSupportTest extends TestCase
         $this->actingAs($this->customer)->postJson('/api/v1/support/tickets/'.$ticketId.'/messages', ['body' => 'Duplicate-safe reply', 'client_message_key' => 'reply-1'])->assertCreated();
         $this->assertSame(2, DB::table('support_messages')->where('support_ticket_id', $ticketId)->count());
         $this->actingAs($this->other)->getJson('/api/v1/support/tickets/'.$ticketId)->assertNotFound();
-        $this->actingAs($this->admin)->postJson('/api/v1/platform/support/tickets/'.$ticketId.'/reply', ['body' => 'Internal analyst note', 'visibility' => 'internal'])->assertCreated();
+        $this->withSession(['platform_admin_authenticated_at' => now()->toIso8601String()])->actingAs($this->admin)->postJson('/api/v1/platform/support/tickets/'.$ticketId.'/reply', ['body' => 'Internal analyst note', 'visibility' => 'internal'])->assertCreated();
         $this->actingAs($this->customer)->getJson('/api/v1/support/tickets/'.$ticketId)->assertJsonMissing(['body' => 'Internal analyst note']);
     }
 
@@ -74,8 +74,8 @@ final class CommunicationSupportTest extends TestCase
     {
         $ticket = SupportTicket::create(['user_id' => $this->customer->id, 'created_by' => $this->customer->id, 'ticket_reference' => 'SUP-ASSIGN', 'category' => 'account_access', 'subject' => 'Access', 'priority' => 'high', 'status' => 'open']);
         $agent = $this->makeUser('agent@example.com', 'staff');
-        $this->actingAs($this->admin)->postJson('/api/v1/platform/support/tickets/'.$ticket->id.'/assign', ['agent_id' => $agent->id])->assertOk()->assertJsonPath('data.assigned_to', $agent->id);
-        $this->actingAs($this->admin)->postJson('/api/v1/platform/support/tickets/'.$ticket->id.'/transition', ['status' => 'in_progress', 'notes' => 'Investigation started'])->assertOk()->assertJsonPath('data.status', 'in_progress');
+        $this->withSession(['platform_admin_authenticated_at' => now()->toIso8601String()])->actingAs($this->admin)->postJson('/api/v1/platform/support/tickets/'.$ticket->id.'/assign', ['agent_id' => $agent->id])->assertOk()->assertJsonPath('data.assigned_to', $agent->id);
+        $this->withSession(['platform_admin_authenticated_at' => now()->toIso8601String()])->actingAs($this->admin)->postJson('/api/v1/platform/support/tickets/'.$ticket->id.'/transition', ['status' => 'in_progress', 'notes' => 'Investigation started'])->assertOk()->assertJsonPath('data.status', 'in_progress');
         $this->actingAs($this->other)->getJson('/api/v1/platform/support/tickets')->assertForbidden();
     }
 

@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\V1\PlatformNotificationController;
 use App\Http\Controllers\Api\V1\PlatformReportController;
 use App\Http\Controllers\Api\V1\MerchantReportController;
 use App\Http\Controllers\Api\V1\PlatformQaController;
+use App\Http\Controllers\Api\V1\PlatformMobileQaController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -177,6 +178,12 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/qa/performance', [PlatformQaController::class, 'performance'])->middleware('platform.admin:audit.read');
             Route::get('/qa/recovery', [PlatformQaController::class, 'recovery'])->middleware('platform.admin:audit.read');
             Route::get('/qa/release-readiness', [PlatformQaController::class, 'releaseReadiness'])->middleware('platform.admin:dashboard.read');
+            Route::get('/mobile/overview', [PlatformMobileQaController::class, 'overview'])->middleware('platform.admin:dashboard.read');
+            Route::get('/mobile/builds', [PlatformMobileQaController::class, 'builds'])->middleware('platform.admin:audit.read');
+            Route::get('/mobile/crashes', [PlatformMobileQaController::class, 'crashes'])->middleware('platform.admin:audit.read');
+            Route::get('/mobile/feedback', [PlatformMobileQaController::class, 'feedback'])->middleware('platform.admin:audit.read');
+            Route::get('/mobile/candidates', [PlatformMobileQaController::class, 'candidates'])->middleware('platform.admin:audit.read');
+            Route::get('/mobile/release-readiness', [PlatformMobileQaController::class, 'releaseReadiness'])->middleware('platform.admin:dashboard.read');
             Route::get('/reports/overview', [PlatformReportController::class, 'overview'])->middleware('platform.admin:financial.read');
             Route::get('/reports/revenue', [PlatformReportController::class, 'revenue'])->middleware('platform.admin:financial.read');
             Route::get('/reports/transaction-volume', [PlatformReportController::class, 'transactionVolume'])->middleware('platform.admin:financial.read');

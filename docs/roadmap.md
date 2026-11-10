@@ -41,3 +41,10 @@ Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, 
 - Maintain an evidence-backed QA test-run, finding, performance and recovery model.
 - Keep release gates blocked when required evidence is absent.
 - Complete PostgreSQL concurrency, browser accessibility, load, dependency, container and restore validation in isolated CI/staging environments before any production approval.
+
+# Phase 16 — Mobile QA and sandbox beta
+
+- Complete Flutter tooling validation and generate native Android/iOS projects.
+- Implement and test transfer, FX, QR, notifications, support, KYC and security journeys.
+- Import CI builds, mobile test runs, crash reports and beta feedback into the mobile operations dashboard.
+- Keep Android/iOS release gates blocked until actual device, security, accessibility and beta approval evidence exists.

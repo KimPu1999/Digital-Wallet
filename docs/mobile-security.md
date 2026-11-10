@@ -11,3 +11,5 @@
 - Android/iOS signing materials remain outside the repository.
 
 Production release still requires platform threat modeling, secure crash reporting, privacy review and physical-device testing.
+
+Phase 16 additionally requires review of screenshots/clipboard exposure, deep-link allowlists, redacted crash metadata, permission minimization, session revocation after logout, and certificate validation on real devices.

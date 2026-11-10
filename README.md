@@ -142,3 +142,9 @@ The `mobile/` directory contains a Flutter customer-client foundation using Rive
 ## Phase 17 enterprise operations
 
 Phase 17 adds evidence-backed enterprise operations, governance records, deterministic feature rollout metadata, privacy-request tracking, incident records, release candidates, and privacy-conscious product analytics. Sensitive changes use existing maker-checker approval and step-up controls. No live financial capability or production deployment is enabled.
+
+## Phase 18 regulatory readiness
+
+Phase 18 adds evidence-backed jurisdiction and regulated-activity assessments, licensing readiness, regulatory obligations, prospective banking/PSP partner due diligence, environment-specific capability approvals, currency-separated safeguarding reconciliation, compliance assurance findings, private evidence metadata, controlled pilot plans, and blocked launch-readiness gates. These records do not represent legal authorization, a license, a banking partnership, safeguarding evidence, or regulatory approval. Live financial execution remains disabled.
+
+Useful routes include `/api/v1/platform/regulatory/overview`, `/api/v1/platform/regulatory/partners`, `/api/v1/platform/safeguarding/overview`, and `/api/v1/platform/launch/readiness`. Access requires an authorized platform role and verified MFA. Launch assessment requests create independent approval work items and cannot activate production provider capabilities.

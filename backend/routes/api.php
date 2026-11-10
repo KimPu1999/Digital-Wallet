@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\V1\MerchantReportController;
 use App\Http\Controllers\Api\V1\PlatformQaController;
 use App\Http\Controllers\Api\V1\PlatformMobileQaController;
 use App\Http\Controllers\Api\V1\PlatformEnterpriseController;
+use App\Http\Controllers\Api\V1\PlatformRegulatoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -212,6 +213,30 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/product-analytics/funnels', [PlatformEnterpriseController::class, 'funnels'])->middleware('platform.admin:dashboard.read');
             Route::get('/product-feedback', [PlatformEnterpriseController::class, 'feedback'])->middleware('platform.admin:support.read');
             Route::post('/product-feedback', [PlatformEnterpriseController::class, 'createFeedback'])->middleware('platform.admin:support.manage');
+            Route::prefix('regulatory')->group(function (): void {
+                Route::get('/overview', [PlatformRegulatoryController::class, 'overview'])->middleware('platform.admin:dashboard.read');
+                Route::get('/jurisdictions', [PlatformRegulatoryController::class, 'jurisdictions'])->middleware('platform.admin:compliance.read');
+                Route::get('/activities', [PlatformRegulatoryController::class, 'activities'])->middleware('platform.admin:compliance.read');
+                Route::get('/licenses', [PlatformRegulatoryController::class, 'licenses'])->middleware('platform.admin:compliance.read');
+                Route::get('/obligations', [PlatformRegulatoryController::class, 'obligations'])->middleware('platform.admin:compliance.read');
+                Route::get('/partners', [PlatformRegulatoryController::class, 'partners'])->middleware('platform.admin:merchants.read');
+                Route::post('/partners', [PlatformRegulatoryController::class, 'createPartner'])->middleware('platform.admin:settings.manage');
+                Route::get('/partners/{id}', [PlatformRegulatoryController::class, 'partner'])->middleware('platform.admin:merchants.read');
+                Route::get('/partners/{id}/capabilities', [PlatformRegulatoryController::class, 'partnerCapabilities'])->middleware('platform.admin:settings.read');
+                Route::get('/evidence', [PlatformRegulatoryController::class, 'evidence'])->middleware('platform.admin:compliance.read');
+                Route::get('/assessments', [PlatformRegulatoryController::class, 'assessments'])->middleware('platform.admin:compliance.read');
+            });
+            Route::prefix('safeguarding')->group(function (): void {
+                Route::get('/overview', [PlatformRegulatoryController::class, 'safeguardingOverview'])->middleware('platform.admin:financial.read');
+                Route::get('/reconciliations', [PlatformRegulatoryController::class, 'safeguardingReconciliations'])->middleware('platform.admin:reconciliation.read');
+                Route::get('/exceptions', [PlatformRegulatoryController::class, 'safeguardingExceptions'])->middleware('platform.admin:reconciliation.read');
+            });
+            Route::prefix('launch')->group(function (): void {
+                Route::get('/readiness', [PlatformRegulatoryController::class, 'launchReadiness'])->middleware('platform.admin:dashboard.read');
+                Route::get('/gates', [PlatformRegulatoryController::class, 'launchGates'])->middleware('platform.admin:compliance.read');
+                Route::get('/pilots', [PlatformRegulatoryController::class, 'pilots'])->middleware('platform.admin:dashboard.read');
+                Route::post('/assessments', [PlatformRegulatoryController::class, 'createLaunchAssessment'])->middleware('platform.admin:approvals.request');
+            });
             Route::get('/reports/overview', [PlatformReportController::class, 'overview'])->middleware('platform.admin:financial.read');
             Route::get('/reports/revenue', [PlatformReportController::class, 'revenue'])->middleware('platform.admin:financial.read');
             Route::get('/reports/transaction-volume', [PlatformReportController::class, 'transactionVolume'])->middleware('platform.admin:financial.read');

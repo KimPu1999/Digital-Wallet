@@ -55,3 +55,12 @@ Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, 
 - Populate enterprise operations from authorized production-like telemetry only.
 - Complete policy ownership, access reviews, release approvals and retention review.
 - Keep financial feature activation and production deployment behind independent approvals.
+
+# Phase 18 — Regulatory readiness and controlled launch
+
+- Complete qualified legal review for every target jurisdiction and regulated activity.
+- Replace placeholder evidence references with independently verified private evidence.
+- Complete partner due diligence, agreements, production capability approvals, and safeguarding source validation.
+- Complete consumer-protection, privacy, security-assurance, operational-resilience, and incident-readiness reviews.
+- Run PostgreSQL reconciliation and authorization tests for the new readiness domain.
+- Keep all launch gates blocked until external approvals exist; no dashboard action enables live money movement.

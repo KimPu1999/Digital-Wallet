@@ -82,6 +82,17 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/transfers/{transfer}/cancel', [TransferController::class, 'cancel']);
         Route::get('/transfers/{transfer}', [TransferController::class, 'show']);
         Route::get('/profile', [ProfileController::class, 'show']);
+        Route::get('/me', [ProfileController::class, 'show']);
+        Route::patch('/me/profile', [ProfileController::class, 'update']);
+        Route::get('/me/preferences', [ProfileController::class, 'preferences']);
+        Route::patch('/me/preferences', [ProfileController::class, 'updatePreferences']);
+        Route::post('/me/password', [ProfileController::class, 'changePassword'])->middleware('throttle:auth');
+        Route::get('/me/privacy/requests', [ProfileController::class, 'privacyRequests']);
+        Route::post('/me/privacy/requests', [ProfileController::class, 'createPrivacyRequest'])->middleware('throttle:auth');
+        Route::get('/me/sessions', [SecurityController::class, 'sessions']);
+        Route::delete('/me/sessions/{session}', [SecurityController::class, 'revokeSession'])->middleware('throttle:auth');
+        Route::get('/me/devices', [SecurityController::class, 'devices']);
+        Route::delete('/me/devices/{device}', [SecurityController::class, 'revokeDevice'])->middleware('throttle:auth');
         Route::get('/payment-methods', [PaymentController::class, 'methods']);
         Route::post('/payments/deposits/intent', [PaymentController::class, 'deposit'])->middleware('throttle:transfers');
         Route::post('/payments/withdrawals/intent', [PaymentController::class, 'withdrawal'])->middleware('throttle:transfers');
@@ -100,6 +111,8 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead']);
         Route::get('/notification-preferences', [NotificationController::class, 'preferences']);
         Route::patch('/notification-preferences', [NotificationController::class, 'updatePreferences']);
+        Route::get('/me/notifications/preferences', [NotificationController::class, 'preferences']);
+        Route::patch('/me/notifications/preferences', [NotificationController::class, 'updatePreferences']);
         Route::get('/support/tickets', [SupportController::class, 'customerIndex']);
         Route::post('/support/tickets', [SupportController::class, 'customerCreate'])->middleware('throttle:transfers');
         Route::get('/support/tickets/{id}', [SupportController::class, 'customerShow']);

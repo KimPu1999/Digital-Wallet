@@ -64,3 +64,12 @@ Container, CI/CD, Terraform contract, observability, backup, disaster-recovery, 
 - Complete consumer-protection, privacy, security-assurance, operational-resilience, and incident-readiness reviews.
 - Run PostgreSQL reconciliation and authorization tests for the new readiness domain.
 - Keep all launch gates blocked until external approvals exist; no dashboard action enables live money movement.
+
+# Phase 19 — Controlled sandbox pilot operations
+
+- Build sandbox-only pilot programs, cohorts and participant enrollment.
+- Enforce account, KYC/KYB, risk, schedule, jurisdiction, currency and feature eligibility server-side.
+- Apply currency-aware pilot limits without inventing regulatory thresholds.
+- Monitor sandbox activity, provider telemetry, queues, webhooks, reconciliation and exceptions.
+- Require independent approvals for evaluation decisions and auditable pilot closure.
+- Keep live financial execution disabled; a pilot decision is not legal, partner or production authorization.

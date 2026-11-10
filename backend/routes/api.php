@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\PlatformQaController;
 use App\Http\Controllers\Api\V1\PlatformMobileQaController;
 use App\Http\Controllers\Api\V1\PlatformEnterpriseController;
 use App\Http\Controllers\Api\V1\PlatformRegulatoryController;
+use App\Http\Controllers\Api\V1\PlatformPilotController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -236,6 +237,31 @@ Route::prefix('v1')->group(function (): void {
                 Route::get('/gates', [PlatformRegulatoryController::class, 'launchGates'])->middleware('platform.admin:compliance.read');
                 Route::get('/pilots', [PlatformRegulatoryController::class, 'pilots'])->middleware('platform.admin:dashboard.read');
                 Route::post('/assessments', [PlatformRegulatoryController::class, 'createLaunchAssessment'])->middleware('platform.admin:approvals.request');
+            });
+            Route::prefix('pilots')->group(function (): void {
+                Route::get('/', [PlatformPilotController::class, 'index'])->middleware('platform.admin:dashboard.read');
+                Route::post('/', [PlatformPilotController::class, 'store'])->middleware('platform.admin:settings.manage');
+                Route::get('/{id}', [PlatformPilotController::class, 'show'])->middleware('platform.admin:dashboard.read');
+                Route::get('/{id}/overview', [PlatformPilotController::class, 'overview'])->middleware('platform.admin:dashboard.read');
+                Route::patch('/{id}', [PlatformPilotController::class, 'update'])->middleware('platform.admin:settings.manage');
+                Route::get('/{id}/cohorts', [PlatformPilotController::class, 'cohorts'])->middleware('platform.admin:dashboard.read');
+                Route::post('/{id}/cohorts', [PlatformPilotController::class, 'createCohort'])->middleware('platform.admin:settings.manage');
+                Route::get('/{id}/participants', [PlatformPilotController::class, 'participants'])->middleware('platform.admin:dashboard.read');
+                Route::post('/{id}/participants', [PlatformPilotController::class, 'addParticipant'])->middleware('platform.admin:settings.manage');
+                Route::get('/{id}/eligibility', [PlatformPilotController::class, 'eligibility'])->middleware('platform.admin:compliance.read');
+                Route::get('/{id}/limits', [PlatformPilotController::class, 'limits'])->middleware('platform.admin:financial.read');
+                Route::get('/{id}/activity', [PlatformPilotController::class, 'activity'])->middleware('platform.admin:financial.read');
+                Route::get('/{id}/monitoring', [PlatformPilotController::class, 'monitoring'])->middleware('platform.admin:dashboard.read');
+                Route::get('/{id}/transactions', [PlatformPilotController::class, 'transactions'])->middleware('platform.admin:financial.read');
+                Route::get('/{id}/reconciliation', [PlatformPilotController::class, 'reconciliation'])->middleware('platform.admin:reconciliation.read');
+                Route::get('/{id}/exceptions', [PlatformPilotController::class, 'exceptions'])->middleware('platform.admin:reconciliation.read');
+                Route::get('/{id}/reports', [PlatformPilotController::class, 'reports'])->middleware('platform.admin:reports.export');
+                Route::get('/{id}/evaluations', [PlatformPilotController::class, 'evaluations'])->middleware('platform.admin:dashboard.read');
+                Route::post('/{id}/evaluations', [PlatformPilotController::class, 'createEvaluation'])->middleware('platform.admin:compliance.decide');
+                Route::get('/{id}/decisions', [PlatformPilotController::class, 'decisions'])->middleware('platform.admin:approvals.request');
+                Route::post('/{id}/decisions', [PlatformPilotController::class, 'createDecision'])->middleware('platform.admin:approvals.request');
+                Route::post('/{id}/pause', [PlatformPilotController::class, 'pause'])->middleware('platform.admin:settings.manage');
+                Route::post('/{id}/closure', [PlatformPilotController::class, 'closure'])->middleware('platform.admin:approvals.request');
             });
             Route::get('/reports/overview', [PlatformReportController::class, 'overview'])->middleware('platform.admin:financial.read');
             Route::get('/reports/revenue', [PlatformReportController::class, 'revenue'])->middleware('platform.admin:financial.read');

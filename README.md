@@ -148,3 +148,9 @@ Phase 17 adds evidence-backed enterprise operations, governance records, determi
 Phase 18 adds evidence-backed jurisdiction and regulated-activity assessments, licensing readiness, regulatory obligations, prospective banking/PSP partner due diligence, environment-specific capability approvals, currency-separated safeguarding reconciliation, compliance assurance findings, private evidence metadata, controlled pilot plans, and blocked launch-readiness gates. These records do not represent legal authorization, a license, a banking partnership, safeguarding evidence, or regulatory approval. Live financial execution remains disabled.
 
 Useful routes include `/api/v1/platform/regulatory/overview`, `/api/v1/platform/regulatory/partners`, `/api/v1/platform/safeguarding/overview`, and `/api/v1/platform/launch/readiness`. Access requires an authorized platform role and verified MFA. Launch assessment requests create independent approval work items and cannot activate production provider capabilities.
+
+## Phase 19 controlled sandbox pilot operations
+
+Phase 19 adds sandbox-only pilot programs, scoped cohorts and participants, backend eligibility checks, currency-aware pilot limits, activity and provider monitoring, reconciliation reviews, exceptions, evaluations, independent decision approvals and auditable closure requests.
+
+Pilot operations cannot post ledger entries, activate production providers or enable live money movement. Missing telemetry is not treated as healthy, and currency totals are never combined implicitly.

@@ -12,6 +12,9 @@ use App\Http\Controllers\Api\V1\WalletFinancialController;
 use App\Http\Controllers\Api\V1\AdminLedgerController;
 use App\Http\Controllers\Api\V1\FxController;
 use App\Http\Controllers\Api\V1\AdminFxController;
+use App\Http\Controllers\Api\V1\BeneficiaryController;
+use App\Http\Controllers\Api\V1\TransferController;
+use App\Http\Controllers\Api\V1\AdminTransferController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -44,6 +47,20 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/fx/quotes/{quote}/convert', [FxController::class, 'convert'])->middleware('throttle:fx-conversion');
         Route::get('/fx/conversions', [FxController::class, 'conversions']);
         Route::get('/fx/conversions/{conversion}', [FxController::class, 'conversion']);
+        Route::get('/beneficiaries', [BeneficiaryController::class, 'index']);
+        Route::post('/beneficiaries', [BeneficiaryController::class, 'store'])->middleware('throttle:transfers');
+        Route::get('/beneficiaries/{beneficiary}', [BeneficiaryController::class, 'show']);
+        Route::patch('/beneficiaries/{beneficiary}', [BeneficiaryController::class, 'update']);
+        Route::delete('/beneficiaries/{beneficiary}', [BeneficiaryController::class, 'destroy']);
+        Route::post('/transfers/step-up', [TransferController::class, 'stepUp'])->middleware('throttle:transfers');
+        Route::post('/transfers/quotes', [TransferController::class, 'quote'])->middleware('throttle:transfers');
+        Route::get('/transfers/quotes/{quote}', [TransferController::class, 'quoteShow']);
+        Route::post('/transfers', [TransferController::class, 'execute'])->middleware('throttle:transfers');
+        Route::get('/transfers', [TransferController::class, 'index']);
+        Route::get('/transfers/{transfer}/timeline', [TransferController::class, 'timeline']);
+        Route::get('/transfers/{transfer}/receipt', [TransferController::class, 'receipt']);
+        Route::post('/transfers/{transfer}/cancel', [TransferController::class, 'cancel']);
+        Route::get('/transfers/{transfer}', [TransferController::class, 'show']);
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::get('/auth/mfa', [AuthController::class, 'mfaStatus']);
         Route::post('/auth/mfa/enroll', [AuthController::class, 'mfaEnroll']);
@@ -65,6 +82,10 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/fx/providers', [AdminFxController::class, 'providers']);
             Route::get('/fx/reconciliation', [AdminFxController::class, 'reconciliation']);
             Route::get('/fx/audit-events', [AdminFxController::class, 'auditEvents']);
+            Route::get('/transfers/review-queue', [AdminTransferController::class, 'reviewQueue']);
+            Route::get('/transfers/risk-alerts', [AdminTransferController::class, 'riskAlerts']);
+            Route::get('/transfers', [AdminTransferController::class, 'index']);
+            Route::get('/transfers/{transfer}', [AdminTransferController::class, 'show']);
         });
     });
 });

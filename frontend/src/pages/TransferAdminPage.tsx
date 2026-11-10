@@ -1,0 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
+import { AlertTriangle, ClipboardList, Clock3, ShieldCheck, Sparkles } from 'lucide-react';
+import { apiFetch } from '../lib/api';
+
+type AdminTransfer = { id: string; transfer_reference: string; status: string; source_currency_code: string; destination_currency_code: string; source_amount_minor: number; sandbox_only: boolean; beneficiary?: { display_name: string } };
+
+export function TransferAdminPage() {
+  const { data, isLoading, isError } = useQuery({ queryKey: ['admin-transfers'], queryFn: () => apiFetch<{ data: AdminTransfer[] }>('/admin/transfers') });
+  return <main className="page"><div className="page-heading"><div><span className="eyebrow">PLATFORM CONTROL CENTER</span><h1>Transfer center</h1><p className="subtle">Review sandbox transfer state, screening, attempts, and exceptions.</p></div><span className="demo-badge"><Sparkles size={13}/> Read-only sandbox</span></div><div className="demo-notice"><ShieldCheck size={17}/><span><strong>No manual balance actions.</strong> Admin routes are role-protected and provide monitoring only. High-risk approval workflows remain disabled.</span></div>{isError && <div className="wallet-error"><AlertTriangle size={17}/><div>Unable to load transfer directory.<small>Check admin authorization and API availability.</small></div></div>}<section className="side-card transfer-history"><div className="side-card-head"><div><h3>Transfer directory</h3><p>Search, filters, review queue, risk alerts, and reconciliation are server-scoped.</p></div><ClipboardList size={20}/></div>{isLoading ? <div className="empty-state compact"><Clock3 size={24}/><p>Loading transfer records…</p></div> : data?.data.map((item) => <div className="transfer-row" key={item.id}><span className="transfer-icon"><ClipboardList size={17}/></span><div><strong>{item.beneficiary?.display_name ?? 'Transfer'}</strong><small>{item.transfer_reference} · {item.source_amount_minor.toLocaleString()} {item.source_currency_code} → {item.destination_currency_code}</small></div><span className="wallet-status warning"><i/>{item.status}</span></div>)}</section></main>;
+}

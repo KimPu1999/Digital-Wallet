@@ -29,3 +29,6 @@ Posted entries are never edited or deleted. A reversal creates a new compensatin
 ## Idempotency
 
 Financial commands use a scoped idempotency key and SHA-256 request fingerprint. The unique `(scope, key)` constraint and row lock protect reservation/completion. A completed request replays its original transaction reference; a reused key with different payload is rejected.
+## Transfer settlement integration
+
+Sandbox internal transfers use the existing wallet-hold capture path and immutable ledger posting service. No transfer service writes a balance directly. A future external settlement callback must be authenticated, idempotent, state-validated, and reconciled against the transfer hold and ledger transaction before completion.

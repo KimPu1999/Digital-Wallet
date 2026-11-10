@@ -24,3 +24,6 @@ php artisan ledger:seed-accounts
 ```
 
 Production operations still need scheduled execution, alerting, retention, independent review, and PostgreSQL transaction/concurrency testing.
+# Phase 6 transfer reconciliation
+
+Transfer reconciliation must compare every transfer's hold state, transfer event state, provider attempt state, and linked ledger transaction. A completed transfer is valid only when the source hold is captured exactly once and the linked journal is posted and balanced. Failed, timed-out, cancelled, and returned transfers must have released holds and released limit usage. Differences are exceptions for review; the system must never silently edit a balance or mark an external provider as settled.

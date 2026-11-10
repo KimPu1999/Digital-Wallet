@@ -5,4 +5,5 @@
 3. Phase 3: multi-currency wallet metadata, explicit customer/merchant ownership, preferences, status history, dashboard management, merchant wallet views, and read-only admin monitoring.
 4. Phase 4: double-entry ledger implementation, idempotency, holds, reversals, reconciliation, immutable postings, and read-only financial monitoring. No payment rails are enabled.
 5. Phase 5: sandbox FX quotes, fee/spread calculation, provider abstraction, two-currency ledger conversion posting, idempotency, and FX monitoring. No live provider or settlement is enabled.
-6. Phase 6: PostgreSQL concurrency hardening, external-provider certification, operational controls, compliance/security approvals, and any carefully scoped money movement.
+6. Phase 6: sandbox beneficiary management, transfer quotes, internal wallet transfers, limits, step-up challenges, mock screening/provider adapters, hold settlement, timelines, receipts, and admin monitoring.
+7. Phase 7: PostgreSQL concurrency certification, real compliance integrations, provider callback security, operational dual approval, and production authorization review.

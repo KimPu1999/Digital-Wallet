@@ -1,6 +1,6 @@
 # Digital Wallet Platform
 
-Phase 5 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances and FX conversions are internal/demo state, and real deposits, withdrawals, transfers, external FX, or payment processing are not enabled.
+Phase 6 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances, FX conversions, and transfers are internal/demo state, and real deposits, withdrawals, external FX, bank payouts, or payment processing are not enabled.
 
 ## Requirements
 
@@ -69,6 +69,10 @@ Ledger posting is internal-only. The customer and merchant APIs expose read-only
 ## FX sandbox
 
 The seed creates deterministic sandbox pairs and fee rules. FX requires the authenticated user's country capability fx_enabled; this is a sandbox feature flag, not a regulatory, corridor, or provider approval. Quote creation and conversion use /api/v1/fx/*, require wallet access, and mark every response sandbox_only. Conversion execution requires an Idempotency-Key.
+
+## Transfer sandbox
+
+Transfer beneficiaries, quotes, step-up challenges, limits, screening records, holds, and timelines are available under /api/v1/beneficiaries and /api/v1/transfers. The customer UI is available at /app/transfers and /app/beneficiaries; platform monitoring is available at /api/v1/admin/transfers. Seeded limits are demo configuration only. No live payout provider is configured.
 
 ## Phase 3 readiness
 

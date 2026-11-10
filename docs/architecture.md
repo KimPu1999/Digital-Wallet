@@ -22,3 +22,7 @@ The future financial core is intentionally not enabled. Wallet rows describe acc
 ## Phase 5 FX boundary
 
 FX is a bounded domain above the Phase 4 ledger. Provider adapters create rate snapshots; the quote service creates immutable, expiring quotes; the conversion service turns an accepted sandbox quote into a two-currency balanced ledger journal. Wallet metadata and projections remain separate from quote and conversion records. The customer API cannot submit arbitrary ledger lines.
+
+## Phase 6 transfer boundary
+
+Transfers are a separate command domain above wallets, holds, ledger, FX, compliance, and provider ports. Beneficiary details are encrypted; quotes are server-authoritative; the transfer state machine is explicit; limit usage and step-up challenges are persisted; mock screening/provider adapters are deterministic and sandbox-labeled. Only the transfer service can reserve, capture, or release holds and invoke the internal ledger posting boundary.

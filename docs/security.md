@@ -15,4 +15,6 @@ Phase 4 adds deterministic ledger-account locks, projection locks for holds, sco
 
 FX quote and conversion routes require Sanctum authentication, wallet policy ownership/access, country FX capability, server-side validation, per-user rate limits, scoped idempotency, and audit events. Quotes and conversions are marked sandbox_only. The only registered provider is a deterministic mock provider; provider errors do not silently fall back to another rate.
 
+Phase 6 adds beneficiary ownership checks, encrypted account details, transfer quote expiry, database-backed limit locks, one-time step-up challenge consumption, mock screening records, provider-attempt records, and hold/ledger atomicity. The development-only step-up code and mock screening result must be replaced before production.
+
 Production work must add provider credential isolation, stale-rate policy, circuit breakers, market-data monitoring, rate manipulation controls, approval workflows, and PostgreSQL concurrency tests before enabling any external provider.

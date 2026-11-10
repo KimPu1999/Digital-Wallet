@@ -1,0 +1,11 @@
+<?php
+namespace App\Http\Controllers\Api\V1;
+use App\Http\Requests\BeneficiaryRequest; use App\Http\Resources\BeneficiaryResource; use App\Models\Beneficiary; use App\Services\BeneficiaryService; use Illuminate\Http\JsonResponse; use Illuminate\Http\Request;
+final class BeneficiaryController
+{
+    public function index(Request $request): JsonResponse { $query=Beneficiary::with('accounts')->where(function($q) use($request){$q->where('user_id',$request->user()->id); if($request->user()->user_type==='merchant') $q->orWhereIn('merchant_id',\Illuminate\Support\Facades\DB::table('merchant_memberships')->where('user_id',$request->user()->id)->pluck('merchant_id'));}); if($search=$request->string('search')->toString()) $query->where('search_name','like','%'.strtolower($search).'%'); $rows=$query->latest()->paginate(10); return response()->json(['data'=>BeneficiaryResource::collection($rows->items()),'meta'=>['current_page'=>$rows->currentPage(),'last_page'=>$rows->lastPage(),'per_page'=>10,'total'=>$rows->total()],'sandbox_only'=>true]); }
+    public function store(BeneficiaryRequest $request, BeneficiaryService $service): JsonResponse { return response()->json(['data'=>new BeneficiaryResource($service->create($request->user(),$request->validated())),'sandbox_only'=>true],201); }
+    public function show(Request $request, Beneficiary $beneficiary): JsonResponse { app(BeneficiaryService::class)->assertOwned($request->user(),$beneficiary); return response()->json(['data'=>new BeneficiaryResource($beneficiary->load('accounts')),'sandbox_only'=>true]); }
+    public function update(Request $request, Beneficiary $beneficiary, BeneficiaryService $service): JsonResponse { $data=$request->validate(['display_name'=>['sometimes','string','max:120'],'country_code'=>['sometimes','string','size:2'],'status'=>['sometimes','in:active,deactivated']]); return response()->json(['data'=>new BeneficiaryResource($service->update($request->user(),$beneficiary,$data)),'sandbox_only'=>true]); }
+    public function destroy(Request $request, Beneficiary $beneficiary, BeneficiaryService $service): JsonResponse { return response()->json(['data'=>new BeneficiaryResource($service->deactivate($request->user(),$beneficiary)),'sandbox_only'=>true]); }
+}

@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Resources;
+use Illuminate\Http\Resources\Json\JsonResource;
+class TransferQuoteResource extends JsonResource { public function toArray($request): array { return ['id'=>$this->id,'quote_reference'=>$this->quote_reference,'source_currency_code'=>$this->source_currency_code,'destination_currency_code'=>$this->destination_currency_code,'source_amount_minor'=>(int)$this->source_amount_minor,'recipient_amount_minor'=>(int)$this->recipient_amount_minor,'provider_fee_minor'=>(int)$this->provider_fee_minor,'platform_fee_minor'=>(int)$this->platform_fee_minor,'exchange_rate'=>(string)$this->exchange_rate,'fx_quote_reference'=>$this->fx_quote_reference,'corridor_status'=>$this->corridor_status,'status'=>$this->status,'expires_at'=>$this->expires_at,'is_expired'=>$this->isExpired(),'sandbox_only'=>(bool)$this->sandbox_only]; } }

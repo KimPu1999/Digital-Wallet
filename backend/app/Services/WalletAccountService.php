@@ -14,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 
 final class WalletAccountService
 {
-    public function __construct(private CountryEligibilityService $eligibility, private AuditLogger $audit) {}
+    public function __construct(private CountryEligibilityService $eligibility, private AuditLogger $audit, private ChartOfAccountsService $chartOfAccounts) {}
 
     public function create(User $user, string $currencyCode, ?string $nickname = null): Wallet
     {
@@ -33,13 +33,15 @@ final class WalletAccountService
                 if ($wallet->currencyAccounts()->where('currency_id', $currency->id)->exists()) {
                     throw ValidationException::withMessages(['currency_code' => 'This currency account already exists.']);
                 }
-                $wallet->currencyAccounts()->create(['currency_id'=>$currency->id,'status'=>'active']);
+                $currencyAccount=$wallet->currencyAccounts()->create(['currency_id'=>$currency->id,'status'=>'active']);
+                $this->chartOfAccounts->provisionWalletAccount($currencyAccount);
                 $this->audit->record('wallet.currency_account_created',request(),['wallet_id'=>$wallet->id,'currency_code'=>$currency->code]);
                 return $wallet->load(['owner','currencyAccounts.currency','preferences.preferredCurrency']);
             }
             try { $wallet = Wallet::create(['owner_id'=>$owner->id,'user_id'=>$user->id,'currency_id'=>$currency->id,'label'=>$ownerType === 'merchant' ? 'Business wallet' : 'Personal wallet','nickname'=>$nickname,'wallet_type'=>$ownerType,'status'=>'active']); } catch (QueryException $e) { throw ValidationException::withMessages(['wallet'=>'Unable to create this wallet account.']); }
             $wallet->statusHistory()->create(['actor_id'=>$user->id,'to_status'=>'active','reason'=>'wallet_created']);
-            $wallet->currencyAccounts()->create(['currency_id'=>$currency->id,'status'=>'active']);
+            $currencyAccount=$wallet->currencyAccounts()->create(['currency_id'=>$currency->id,'status'=>'active']);
+            $this->chartOfAccounts->provisionWalletAccount($currencyAccount);
             $wallet->preferences()->create(['preferred_currency_id'=>$currency->id,'locale'=>'en']);
             $this->audit->record('wallet.created',request(),['wallet_id'=>$wallet->id,'owner_type'=>$ownerType,'currency_code'=>$currency->code]);
             return $wallet->load(['owner','currencyAccounts.currency','preferences.preferredCurrency']);
@@ -49,7 +51,7 @@ final class WalletAccountService
     public function addCurrency(User $user, Wallet $wallet, string $currencyCode): WalletCurrencyAccount
     {
         $this->assertOwner($user, $wallet); $currency=Currency::where('code',strtoupper($currencyCode))->where('is_active',true)->first(); if(!$currency) throw ValidationException::withMessages(['currency_code'=>'This currency is not available.']);
-        try { $account=$wallet->currencyAccounts()->create(['currency_id'=>$currency->id,'status'=>'active']); } catch(QueryException $e) { throw ValidationException::withMessages(['currency_code'=>'This currency account already exists.']); }
+        try { $account=$wallet->currencyAccounts()->create(['currency_id'=>$currency->id,'status'=>'active']); $this->chartOfAccounts->provisionWalletAccount($account); } catch(QueryException $e) { throw ValidationException::withMessages(['currency_code'=>'This currency account already exists.']); }
         $this->audit->record('wallet.currency_account_created',request(),['wallet_id'=>$wallet->id,'currency_code'=>$currency->code]); return $account->load('currency');
     }
 

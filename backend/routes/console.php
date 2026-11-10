@@ -38,3 +38,21 @@ Artisan::command('admin:provision {email} {name} {--role=platform_super_admin}',
     $this->line($temporaryPassword);
     return 0;
 })->purpose('Provision a staff account; never exposed as a public registration flow');
+
+Artisan::command('ledger:seed-accounts {currency?}', function (): int {
+    $currencies = $this->argument('currency') ? [strtoupper((string) $this->argument('currency'))] : ['USD', 'EUR', 'GBP', 'SGD', 'THB', 'MMK'];
+    $chart = app(\App\Services\ChartOfAccountsService::class);
+    foreach ($currencies as $currency) {
+        $chart->provisionSystemAccount('system.settlement.'.strtolower($currency), 'Platform settlement '.$currency, 'asset', 'debit', $currency);
+        $chart->provisionSystemAccount('system.fees.'.strtolower($currency), 'Fee revenue '.$currency, 'revenue', 'credit', $currency);
+        $chart->provisionSystemAccount('system.suspense.'.strtolower($currency), 'Restricted suspense '.$currency, 'asset', 'debit', $currency, true);
+    }
+    $this->info('System chart-of-accounts records are ready. No balances were created.');
+    return 0;
+})->purpose('Provision inactive-by-default system ledger accounts for sandbox operations');
+
+Artisan::command('ledger:reconcile', function (): int {
+    $run = app(\App\Services\ReconciliationService::class)->run();
+    $this->info('Reconciliation '.$run->status.' with '.($run->summary['exceptions'] ?? 0).' exception(s).');
+    return $run->status === 'completed' ? 0 : 1;
+})->purpose('Run a read-only ledger and projection reconciliation');

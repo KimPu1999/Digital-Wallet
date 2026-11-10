@@ -1,6 +1,6 @@
 # Digital Wallet Platform
 
-Phase 3 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: wallet balances are `null` until the Phase 4 ledger, and real deposits, withdrawals, transfers, FX, or payment processing are not enabled.
+Phase 4 foundation for a professional digital wallet product. This repository is deliberately sandbox-only: ledger balances are internal/demo state, and real deposits, withdrawals, transfers, FX, or payment processing are not enabled.
 
 ## Requirements
 
@@ -53,6 +53,16 @@ php artisan admin:provision admin@example.com "Platform Admin" --role=platform_s
 ```
 
 The seed catalog contains USD, EUR, GBP, SGD, THB, and MMK. Currency availability is configuration only; it does not approve a country, payment corridor, or live financial activity. Customer wallet creation requires verified email, country capability, and (where configured) approved KYC. Additional currencies are added through the wallet currency-account endpoint.
+
+## Ledger sandbox
+
+```bash
+cd backend
+php artisan ledger:seed-accounts
+php artisan ledger:reconcile
+```
+
+Ledger posting is internal-only. The customer and merchant APIs expose read-only balances and ledger activity; there are no public journal, deposit, withdrawal, transfer, hold, capture, or reversal commands.
 
 ## Phase 3 readiness
 

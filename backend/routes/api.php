@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\PasswordController;
 use App\Http\Controllers\Api\V1\VerificationController;
 use App\Http\Controllers\Api\V1\WalletController;
+use App\Http\Controllers\Api\V1\WalletFinancialController;
+use App\Http\Controllers\Api\V1\AdminLedgerController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -32,6 +34,8 @@ Route::prefix('v1')->group(function (): void {
         Route::get('/wallets/{wallet}/currencies/{code}', [WalletController::class, 'currency']);
         Route::get('/currencies', [WalletController::class, 'currenciesCatalog']);
         Route::get('/dashboard/wallet-overview', [WalletController::class, 'overview']);
+        Route::get('/wallets/{wallet}/balance', [WalletFinancialController::class, 'balance']);
+        Route::get('/wallets/{wallet}/ledger-activity', [WalletFinancialController::class, 'activity']);
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::get('/auth/mfa', [AuthController::class, 'mfaStatus']);
         Route::post('/auth/mfa/enroll', [AuthController::class, 'mfaEnroll']);
@@ -42,6 +46,11 @@ Route::prefix('v1')->group(function (): void {
         Route::middleware('role:platform_super_admin,compliance_admin,support_agent')->prefix('admin')->group(function (): void {
             Route::get('/wallets', [AdminWalletController::class, 'index']);
             Route::get('/wallets/{wallet}', [AdminWalletController::class, 'show']);
+            Route::get('/ledger/accounts', [AdminLedgerController::class, 'accounts']);
+            Route::get('/ledger/transactions', [AdminLedgerController::class, 'transactions']);
+            Route::get('/ledger/transactions/{transaction}', [AdminLedgerController::class, 'transaction']);
+            Route::get('/ledger/reconciliation', [AdminLedgerController::class, 'reconciliation']);
+            Route::get('/ledger/audit-events', [AdminLedgerController::class, 'auditEvents']);
         });
     });
 });

@@ -4,6 +4,8 @@ The platform is a sandbox-only React/Vite and Laravel application. The client is
 
 Phase 3 introduces a wallet aggregate owned by an explicit `wallet_owners` row. A customer or merchant owner has one wallet metadata record and can add unique `wallet_currency_accounts`. Currency records contain ISO code, symbol, exponent, ordering, and enabled state. Wallet creation is transactional, verifies email and country capability, applies KYC gates, records status history, and writes an audit event. Ownership is derived server-side; customer-supplied owner IDs are ignored.
 
+Phase 4 adds a separate ledger boundary under `app/Domain/Ledger` and financial services. The ledger owns immutable journal entries; projections and holds are derived operational state. The posting boundary is internal and has no customer or merchant money-movement route. Reconciliation and outbox records support future asynchronous operations without implying an external provider integration.
+
 The future financial core is intentionally not enabled. Wallet rows describe account metadata only; there is no mutable balance source of truth and no posting endpoint. A future ledger must use append-only double-entry records and derive balances from ledger entries.
 
 ## Boundaries

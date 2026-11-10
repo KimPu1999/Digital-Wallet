@@ -1,4 +1,4 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Concerns\HasUuids; use Illuminate\Database\Eloquent\Relations\BelongsTo;
-class WalletCurrencyAccount extends Model { use HasUuids; public $incrementing=false; protected $keyType='string'; protected $fillable=['wallet_id','currency_id','status']; public function wallet(): BelongsTo { return $this->belongsTo(Wallet::class); } public function currency(): BelongsTo { return $this->belongsTo(Currency::class); } }
+use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Concerns\HasUuids; use Illuminate\Database\Eloquent\Relations\BelongsTo; use Illuminate\Database\Eloquent\Relations\HasMany; use Illuminate\Database\Eloquent\Relations\HasOne;
+class WalletCurrencyAccount extends Model { use HasUuids; public $incrementing=false; protected $keyType='string'; protected $fillable=['wallet_id','currency_id','status']; public function wallet(): BelongsTo { return $this->belongsTo(Wallet::class); } public function currency(): BelongsTo { return $this->belongsTo(Currency::class); } public function ledgerAccount(): HasOne { return $this->hasOne(LedgerAccount::class); } public function projection(): HasOne { return $this->hasOne(BalanceProjection::class); } public function holds(): HasMany { return $this->hasMany(WalletHold::class); } }

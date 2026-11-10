@@ -38,3 +38,6 @@ AML and fraud decisions are deterministic, explainable, versioned, and fail clos
 Production prerequisites remain: approved screening data providers, jurisdiction-specific monitoring policy, MFA enforcement, retention/deletion schedules, encryption and key management, analyst procedures, regulatory advice, and PostgreSQL-backed concurrency testing.
 
 Phase 11 adds owner-scoped notification and support queries, merchant membership checks, internal-note visibility, private attachment storage, MIME/size validation, sanitized template interpolation, mock-only external channels, and platform support permissions. Provider secrets are not stored or returned.
+## Reporting security
+
+Platform report APIs require server-side financial or reconciliation permissions. Merchant reports require an authorized merchant membership and filter every query by merchant ID. Report ranges are bounded, arbitrary SQL is not accepted, exports are private and expiring, and CSV formula values are neutralized. Report APIs are read-only and cannot edit ledger entries or balances.

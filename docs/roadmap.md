@@ -28,3 +28,6 @@ Phase 11 should add production-provider governance, jurisdiction-specific policy
 - Customer and merchant support tickets with internal-note privacy.
 - Agent assignment, SLA due times, status transitions, and secure attachment intake.
 - Separate dispute case lifecycle and platform communication dashboards.
+## Phase 12 completed foundation
+
+Read-only multi-currency financial reporting, merchant analytics, report runs, private CSV export metadata, and period/snapshot foundations are implemented. Remaining production work includes PostgreSQL performance validation, queued large exports, XLSX/PDF libraries, scheduled reports, approved valuation sources, and period-close governance.

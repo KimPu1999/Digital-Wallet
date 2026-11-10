@@ -42,3 +42,6 @@ Sensitive references are hidden from API serialization. Foreign keys, scoped uni
 ## Phase 11 tables
 
 The communication migration adds Laravel-compatible notifications, preferences, templates, deliveries, event receipts, support tickets/messages/attachments/events/assignments, versioned SLA policies, and dispute cases/events. The notification event receipt and support message client key are idempotency boundaries.
+## Phase 12 reporting tables
+
+Reporting adds versioned definitions and runs, private files, schedules, permissions, audit events, valuation metadata, period-close records, and reproducible report snapshots. These tables contain reporting metadata and do not replace the immutable ledger or balance projections.

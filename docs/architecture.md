@@ -49,3 +49,7 @@ The monitoring domain wraps existing financial data without becoming a financial
 ## Phase 11 communication boundary
 
 Notifications, support tickets, attachments, and disputes are separate domains. Notification event receipts deduplicate messages and delivery records distinguish local/mock queueing from evidence-backed delivery. Support messages have customer/internal visibility, merchant ownership is derived through MerchantAccessService, and disputes never mutate financial state.
+
+## Phase 12 reporting boundary
+
+`app/Domain/Reporting` is a read-only boundary over posted ledger entries and verified sandbox operational tables. It owns report definitions, bounded query parameters, report runs, snapshots, valuation metadata, private export references, and audit events. It cannot call ledger posting services.

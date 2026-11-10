@@ -126,3 +126,7 @@ Useful monitoring routes include /api/v1/platform/security/overview, /api/v1/pla
 ## Phase 11 communication sandbox
 
 Phase 11 adds in-app notifications, preferences, mock-safe external channels, customer and merchant support tickets, private attachment intake, SLA records, and separate dispute cases. External email/SMS/push are not reported as delivered without provider evidence. Support and dispute actions never change ledger balances or enable live money movement.
+
+## Phase 12 reporting
+
+Phase 12 adds read-only financial and merchant reporting over the immutable posted ledger. Trial balance, general ledger, profit/loss, balance sheet, wallet, transfer, FX, payment, settlement, reconciliation, and merchant analytics preserve currency separation and integer minor units. Reports and CSV exports are sandbox-only, private, permission-protected, checksum-tracked, and cannot modify balances.

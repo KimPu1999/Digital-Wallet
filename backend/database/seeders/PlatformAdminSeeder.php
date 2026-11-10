@@ -11,7 +11,7 @@ class PlatformAdminSeeder extends Seeder
     public function run(): void
     {
         $roles = ['platform_super_admin', 'compliance_admin', 'finance_operations', 'risk_analyst', 'support_agent', 'read_only_auditor'];
-        $permissions = ['dashboard.read', 'users.read', 'users.restrict', 'merchants.read', 'compliance.read', 'compliance.decide', 'financial.read', 'reconciliation.read', 'risk.read', 'risk.manage', 'security.read', 'support.read', 'support.manage', 'approvals.request', 'approvals.decide', 'audit.read', 'settings.read', 'settings.manage', 'system.health'];
+        $permissions = ['dashboard.read', 'users.read', 'users.restrict', 'merchants.read', 'compliance.read', 'compliance.decide', 'financial.read', 'reconciliation.read', 'risk.read', 'risk.manage', 'security.read', 'support.read', 'support.manage', 'reports.export', 'approvals.request', 'approvals.decide', 'audit.read', 'settings.read', 'settings.manage', 'system.health'];
         foreach ($roles as $name) DB::table('platform_roles')->updateOrInsert(['name' => $name], ['id' => DB::table('platform_roles')->where('name', $name)->value('id') ?: (string) Str::uuid(), 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()]);
         foreach ($permissions as $name) DB::table('platform_permissions')->updateOrInsert(['name' => $name], ['id' => DB::table('platform_permissions')->where('name', $name)->value('id') ?: (string) Str::uuid(), 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()]);
         $all = DB::table('platform_permissions')->pluck('id', 'name');

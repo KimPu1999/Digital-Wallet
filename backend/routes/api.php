@@ -25,6 +25,8 @@ use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\SupportController;
 use App\Http\Controllers\Api\V1\DisputeController;
 use App\Http\Controllers\Api\V1\PlatformNotificationController;
+use App\Http\Controllers\Api\V1\PlatformReportController;
+use App\Http\Controllers\Api\V1\MerchantReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -168,6 +170,27 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/notifications/failures', [PlatformNotificationController::class, 'failures'])->middleware('platform.admin:support.read');
             Route::get('/disputes', [DisputeController::class, 'platformIndex'])->middleware('platform.admin:support.read');
             Route::post('/disputes/{id}/transition', [DisputeController::class, 'platformTransition'])->middleware('platform.admin:support.manage');
+            Route::get('/reports/overview', [PlatformReportController::class, 'overview'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/revenue', [PlatformReportController::class, 'revenue'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/transaction-volume', [PlatformReportController::class, 'transactionVolume'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/currency-exposure', [PlatformReportController::class, 'currencyExposure'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/trial-balance', [PlatformReportController::class, 'trialBalance'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/general-ledger', [PlatformReportController::class, 'generalLedger'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/profit-loss', [PlatformReportController::class, 'profitLoss'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/balance-sheet', [PlatformReportController::class, 'balanceSheet'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/wallets', [PlatformReportController::class, 'wallets'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/wallet-holds', [PlatformReportController::class, 'holds'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/transfers', [PlatformReportController::class, 'transfers'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/fx', [PlatformReportController::class, 'fx'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/payments', [PlatformReportController::class, 'payments'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/refunds', [PlatformReportController::class, 'refunds'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/settlements', [PlatformReportController::class, 'settlements'])->middleware('platform.admin:financial.read');
+            Route::get('/reports/reconciliation', [PlatformReportController::class, 'reconciliation'])->middleware('platform.admin:reconciliation.read');
+            Route::get('/report-definitions', [PlatformReportController::class, 'definitions'])->middleware('platform.admin:financial.read');
+            Route::post('/report-runs', [PlatformReportController::class, 'createRun'])->middleware('platform.admin:financial.read');
+            Route::get('/report-runs', [PlatformReportController::class, 'runs'])->middleware('platform.admin:financial.read');
+            Route::get('/report-runs/{run}', [PlatformReportController::class, 'run'])->middleware('platform.admin:financial.read');
+            Route::get('/report-runs/{run}/download', [PlatformReportController::class, 'download'])->middleware('platform.admin:financial.read');
         });
         Route::post('/checkout/{token}/wallet-pay', [MerchantCheckoutController::class, 'walletPay'])->middleware('throttle:transfers');
         Route::post('/qr/{token}/wallet-pay', [MerchantCheckoutController::class, 'qrWalletPay'])->middleware('throttle:transfers');
@@ -189,6 +212,12 @@ Route::prefix('v1')->group(function (): void {
             Route::post('/api-keys/{key}/revoke', [MerchantCheckoutController::class, 'revokeApiKey'])->middleware('throttle:transfers');
             Route::get('/webhook-endpoints', [MerchantCheckoutController::class, 'webhookEndpoints']);
             Route::post('/webhook-endpoints', [MerchantCheckoutController::class, 'createWebhookEndpoint'])->middleware('throttle:transfers');
+        });
+        Route::prefix('merchant/reports')->group(function (): void {
+            Route::get('/overview', [MerchantReportController::class, 'overview']);
+            Route::get('/payments', [MerchantReportController::class, 'payments']);
+            Route::get('/refunds', [MerchantReportController::class, 'refunds']);
+            Route::get('/settlements', [MerchantReportController::class, 'settlements']);
         });
         Route::middleware('role:platform_super_admin,compliance_admin,finance_operations,risk_analyst,support_agent,read_only_auditor')->prefix('admin')->group(function (): void {
             Route::get('/wallets', [AdminWalletController::class, 'index']);

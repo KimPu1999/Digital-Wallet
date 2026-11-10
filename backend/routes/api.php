@@ -45,11 +45,11 @@ Route::prefix('v1')->group(function (): void {
     Route::get('/qr/{token}', [MerchantCheckoutController::class, 'publicQr']);
     Route::post('/auth/password/forgot', [PasswordController::class, 'forgot'])->middleware('throttle:auth');
     Route::post('/auth/password/reset', [PasswordController::class, 'reset'])->middleware('throttle:auth');
+    Route::get('/auth/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('/auth/me', [AuthController::class, 'me']);
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         Route::post('/auth/email/resend', [VerificationController::class, 'resend'])->middleware('throttle:auth');
-        Route::get('/auth/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
         Route::get('/wallets', [WalletController::class, 'index']);
         Route::post('/wallets', [WalletController::class, 'store']);
         Route::get('/wallets/{wallet}', [WalletController::class, 'show']);

@@ -11,9 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withCommands([__DIR__.'/../app/Console/Commands'])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
-        $middleware->appendToGroup('api', [App\Http\Middleware\RequestCorrelationId::class]);
+        $middleware->appendToGroup('api', [Illuminate\Session\Middleware\StartSession::class, App\Http\Middleware\RequestCorrelationId::class]);
         $middleware->alias(['role' => App\Http\Middleware\RoleMiddleware::class, 'platform.admin' => App\Http\Middleware\PlatformAdminMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

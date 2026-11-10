@@ -18,7 +18,7 @@ final class PlatformAdminAccessService
     public function assert(User $user, string $permission): PlatformAdminMembership
     {
         $memberships = $this->memberships($user);
-        if ($memberships->isEmpty() || !$user->is_active || !$this->mfa->enabled($user)) throw new UnauthorizedException('Platform administrator access requires an active account and verified MFA.');
+        if ($memberships->isEmpty() || $user->user_type !== 'staff' || !$user->is_active || !$user->hasVerifiedEmail() || !$this->mfa->enabled($user)) throw new UnauthorizedException('Platform administrator access requires an active staff account, verified email, and verified MFA.');
         $membership = $memberships->first(fn ($item) => $item->role->name === 'platform_super_admin' || $item->role->permissions->contains('name', $permission));
         if (!$membership) throw new UnauthorizedException('Platform permission denied.');
         return $membership;
